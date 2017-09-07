@@ -7,15 +7,15 @@ using UnityEngine.Assertions;
 public class AxisInput : MonoBehaviour {
 
     [SerializeField]
-    protected string inputName;
-    [SerializeField]
     protected CharacterActionAxis[] actions;
+    [SerializeField]
+    protected string inputName;
 
     public string GetInputName() {
         return inputName;
     }
 
-    public float GetAxisValue() {
+    public virtual float GetAxisValue() {
         return Input.GetAxis(inputName);
     }
 

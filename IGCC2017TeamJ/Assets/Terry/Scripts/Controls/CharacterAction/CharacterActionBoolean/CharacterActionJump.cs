@@ -20,9 +20,6 @@ public class CharacterActionJump : CharacterActionBoolean {
     }
 
     private void ConstantUpdate() {
-        if (!canJump) {
-            Debug.Log("Y Velocity: " + gameObject.GetComponent<Rigidbody>().velocity.y);
-        }
     }
 
     private void ActiveUpdate() {

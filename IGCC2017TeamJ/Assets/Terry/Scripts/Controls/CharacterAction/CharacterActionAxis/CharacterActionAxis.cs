@@ -13,13 +13,5 @@ public class CharacterActionAxis : CharacterAction {
     public void SetInputValue(float _inputValue) {
         inputValue = _inputValue;
     }
-
-    // Use this for initialization
-    void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	}
     
 }
