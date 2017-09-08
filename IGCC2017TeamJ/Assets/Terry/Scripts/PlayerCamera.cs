@@ -77,7 +77,8 @@ public class PlayerCamera : MonoBehaviour {
 
                 float playerVelocity = playerRigidbody.velocity.magnitude;
                 float desiredSize = minSize + (playerVelocity / playerVelocityLimit.GetMaxVelocity() * (maxSize - minSize));
-                playerCamera.orthographicSize = Mathf.Lerp(playerCamera.orthographicSize, desiredSize, sizeChangeSpeed * Time.deltaTime);
+                desiredSize = Mathf.Lerp(playerCamera.orthographicSize, desiredSize, sizeChangeSpeed * Time.deltaTime);
+                playerCamera.orthographicSize = Mathf.Clamp(desiredSize, minSize, maxSize);
             }
             
             transform.position = desiredPosition;
