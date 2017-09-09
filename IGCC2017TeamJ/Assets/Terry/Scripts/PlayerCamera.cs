@@ -88,5 +88,21 @@ public class PlayerCamera : MonoBehaviour {
         transform.position = new Vector3(LimitPosition(transform.position.x, minimumPosition.x, maximumPosition.x),
             LimitPosition(transform.position.y, minimumPosition.y, maximumPosition.y),
             LimitPosition(transform.position.z, minimumPosition.z, maximumPosition.z));
-	}
+
+        // Raycast to the player. If there are obstacles between, turn them transparent.
+        Vector3 directionToPlayer = target.transform.position - gameObject.transform.position;
+        float raycastDistance = directionToPlayer.magnitude;
+        RaycastHit[] result = Physics.RaycastAll(transform.position, directionToPlayer, raycastDistance);
+        for (uint i = 0; i < result.Length; ++i) {
+            Collider hitCollider = result[i].collider;
+            GameObject hitGameObject = hitCollider.gameObject;
+            WallTransparency hitWallTransparency = hitGameObject.GetComponent<WallTransparency>();
+            if (hitWallTransparency == null) {
+                continue;
+            }
+
+            hitWallTransparency.TurnTransparent();
+            Debug.Log("PlayerCamera::Update - Turning Object Transparent.");
+        }
+    }
 }

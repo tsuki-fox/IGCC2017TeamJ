@@ -25,7 +25,7 @@ public class AxisInput : MonoBehaviour {
             actions[i].SetInputValue(GetAxisValue());
         }
 
-        Debug.Log(inputName + ": " + GetAxisValue());
+        //Debug.Log(inputName + ": " + GetAxisValue());
     }
 
 }
