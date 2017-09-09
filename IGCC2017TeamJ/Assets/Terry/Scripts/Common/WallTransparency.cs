@@ -11,7 +11,6 @@ public class WallTransparency : MonoBehaviour {
     private float maxAlpha = 1.0f;
     [SerializeField]
     private float alphaChangeSpeed = 1.0f;
-    [SerializeField]
     private bool turnTransparent = false;
 
     public void SetMinAlpha(float _minAlpha) {

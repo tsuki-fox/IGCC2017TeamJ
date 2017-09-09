@@ -102,7 +102,7 @@ public class PlayerCamera : MonoBehaviour {
             }
 
             hitWallTransparency.TurnTransparent();
-            Debug.Log("PlayerCamera::Update - Turning Object Transparent.");
+            //Debug.Log("PlayerCamera::Update - Turning Object Transparent.");
         }
     }
 }

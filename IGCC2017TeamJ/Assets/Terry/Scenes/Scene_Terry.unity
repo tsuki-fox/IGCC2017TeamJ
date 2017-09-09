@@ -1226,7 +1226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d585835a08b9e2b4a8d1fc1132c9d1f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minAlpha: 0.4
+  minAlpha: 0.25
   maxAlpha: 1
   alphaChangeSpeed: 1
   turnTransparent: 0
@@ -1450,7 +1450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d585835a08b9e2b4a8d1fc1132c9d1f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minAlpha: 0.4
+  minAlpha: 0.25
   maxAlpha: 1
   alphaChangeSpeed: 1
   turnTransparent: 0
