@@ -93,7 +93,7 @@ public class PlayerCamera : MonoBehaviour {
         Vector3 directionToPlayer = target.transform.position - gameObject.transform.position;
         float raycastDistance = directionToPlayer.magnitude;
         RaycastHit[] result = Physics.RaycastAll(transform.position, directionToPlayer, raycastDistance);
-        for (uint i = 0; i < result.Length; ++i) {
+        for (int i = 0; i < result.Length; ++i) {
             Collider hitCollider = result[i].collider;
             GameObject hitGameObject = hitCollider.gameObject;
             WallTransparency hitWallTransparency = hitGameObject.GetComponent<WallTransparency>();
