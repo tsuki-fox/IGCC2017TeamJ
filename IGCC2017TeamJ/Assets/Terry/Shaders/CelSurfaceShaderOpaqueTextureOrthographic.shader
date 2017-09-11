@@ -1,4 +1,4 @@
-﻿Shader "Custom/Cel Surface Shader (Opaque Textures)" {
+﻿Shader "Custom/Cel Surface Shader (Opaque Textures, Orthographic)" {
 
 	Properties {
 		//_varName("Label", type) = defaultValue;
@@ -7,9 +7,10 @@
 		_BumpTex("Normal Map", 2D) = "bump" {}
 		_Color("Color", Color) = (1,1,1,1)
 		_EdgeColor("Edge Color", Color) = (0,0,0,1)
-		_UnlitVolume("Unlit Volume", Range(-1, 1)) = 0.2
+		_UnlitVolume("Unlit Volume", Range(0, 1)) = 0.2
 		_Brightness("Brightness", Float) = 1
 		_LightingLevels("Lighting Levels", Int) = 3
+		[Toggle]_IsOrthographic("Is Orthographic", Int) = 1
 	}
 
 	SubShader {
@@ -42,7 +43,7 @@
 
 			float4 color : COLOR;
 			INTERNAL_DATA float3 viewDir;
-			//INTERNAL_DATA float3 worldNormal;
+			float3 worldNormal;
 		};
 
 		//Define our properties.
@@ -53,18 +54,24 @@
 		float _UnlitVolume;
 		float _Brightness;
 		int _LightingLevels;
-
-		int visible;
+		int _IsOrthographic;
 
 		half4 LightingCelShadingForward(SurfaceOutput s, half3 lightDir, half atten) {
+			// Forward Vector of the Camera
+			float visibility = 0.0;
+
+			float3 surfaceNormal = normalize(s.Normal.xyz);
+			float3 camForward = normalize(UNITY_MATRIX_MV[2].xyz);
+			visibility = dot(surfaceNormal, camForward);
+
 			half4 c;
-			if (visible == 1) {
+			if (visibility > _UnlitVolume) {
 				half NdotL = dot(s.Normal, lightDir); //How much light is shining on the surface.
 				half brightness = (floor(NdotL * _LightingLevels) / _LightingLevels);
-			
+
 				c.rgb = s.Albedo * _LightColor0.rgb * (brightness * atten * 2.0) * _Brightness;
 			} else {
-				c.rgb = s.Albedo;
+				c.rgb = _EdgeColor.rgb;
 			}
 
 			c.a = s.Alpha;
@@ -79,16 +86,8 @@
 
 			//Albedo comes from a texture tinted by color
 			fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
-			o.Alpha = c.a;	
-
-			half visibility = dot(IN.viewDir, o.Normal);
-			if (visibility < _UnlitVolume) {
-				o.Albedo = _EdgeColor * _LightColor0;
-				visible = 0;
-			} else {
-				o.Albedo = c.rgb * _Color;
-				visible = 1;
-			}
+			o.Alpha = c.a;
+			o.Albedo = c.rgb * _Color;
 		}
 		ENDCG
 	}

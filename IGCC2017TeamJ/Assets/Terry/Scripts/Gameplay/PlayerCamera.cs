@@ -82,6 +82,8 @@ public class PlayerCamera : MonoBehaviour {
             }
             
             transform.position = desiredPosition;
+
+            Debug.Log(transform.forward);
         }
 
         // Bounds checking.
