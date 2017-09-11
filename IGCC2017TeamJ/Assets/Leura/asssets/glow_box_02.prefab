@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33318771392804614}
   - component: {fileID: 65895179597237884}
   - component: {fileID: 23457156345670022}
+  - component: {fileID: 114170827445018790}
   m_Layer: 0
   m_Name: glow_box_02
   m_TagString: Untagged
@@ -93,3 +94,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114170827445018790
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1982233640254930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 664809d3c90c17e4090287e59052a47f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minAlpha: 0.25
+  maxAlpha: 1
+  alphaChangeSpeed: 1
