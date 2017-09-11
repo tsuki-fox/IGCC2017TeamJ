@@ -48,6 +48,14 @@ namespace FlowAI
 		bool _isStopped;
 		#endregion
 
+		#region properties
+		/// <summary>登録されているノード</summary>
+		public List<FlowAINode> nodes { get { return _nodes; } }
+		/// <summary>現在のノード</summary>
+		public FlowAINode currentNode { get { return _currentNode; } }
+		#endregion
+
+		/// <summary>AIのエントリポイント</summary>
 		public EntryPointNode entryPointNode
 		{
 			get { return _entryPoint; }
@@ -72,17 +80,20 @@ namespace FlowAI
 		#endregion
 
 		#region public methods
+		/// <summary>AI開始</summary>
 		public void Entry()
 		{
 			Transition(0);
 		}
 
+		/// <summary>更新処理</summary>
+		/// <param name="delta">デルタ</param>
 		public void Update(float delta)
 		{
 			//停止中だった場合
 			if (_isStopped)
 			{
-				Debug.Log("[UPDT]FlowAIは停止しています");
+			//	Debug.Log("[UPDT]FlowAIは停止しています");
 				return;
 			}
 
@@ -97,10 +108,12 @@ namespace FlowAI
 			//遷移中の場合
 			else
 			{
-				Debug.LogFormat("[UPDT]遷移中 LID{0} >>> LID{1}", _currentNode.localId, _currentNode.GetNextNode().localId);
+			//	Debug.LogFormat("[UPDT]遷移中 LID{0} >>> LID{1}", _currentNode.localId, _currentNode.GetNextNode().localId);
 			}
 		}
 
+		/// <summary>遷移</summary>
+		/// <param name="localId">遷移先のノードID</param>
 		public void Transition(int localId)
 		{
 			var node = _nodes.FirstOrDefault(item => item.localId == localId);
@@ -125,10 +138,22 @@ namespace FlowAI
 			}
 		}
 
+		/// <summary>ノード追加</summary>
+		/// <param name="node">ノード</param>
 		public void AddNode(FlowAINode node)
 		{
 			node.localId = _idCount++;
 			_nodes.Add(node);
+		}
+
+		/// <summary>ノード追加(可変長)</summary>
+		/// <param name="args">ノード</param>
+		public void AddNode(params FlowAINode[] args)
+		{
+			foreach(var item in args)
+			{
+				AddNode(item);
+			}
 		}
 		#endregion
 	}
