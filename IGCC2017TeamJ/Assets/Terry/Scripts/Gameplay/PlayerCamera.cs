@@ -80,10 +80,8 @@ public class PlayerCamera : MonoBehaviour {
                 desiredSize = Mathf.Lerp(playerCamera.orthographicSize, desiredSize, sizeChangeSpeed * Time.deltaTime);
                 playerCamera.orthographicSize = Mathf.Clamp(desiredSize, minSize, maxSize);
             }
-            
-            transform.position = desiredPosition;
 
-            Debug.Log(transform.forward);
+            transform.position = desiredPosition;
         }
 
         // Bounds checking.

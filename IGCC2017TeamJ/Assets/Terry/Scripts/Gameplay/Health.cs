@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEditor.Events;
 
 public class Health : MonoBehaviour {
 
@@ -12,6 +13,17 @@ public class Health : MonoBehaviour {
     private int maxHealth = 100;
     private int previousMaxHealth;
 
+    void SendDeathEventIfDead() {
+        if (IsDead()) {
+            CharacterDeathInfo info;
+            info.name = gameObject.name;
+            info.tag = gameObject.tag;
+            info.deathPosition = gameObject.transform.position;
+
+            GameplayChannel.GetInstance().SendPlayerDeathEvent(info);
+        }
+    }
+
     void Awake() {
     }
 
@@ -22,6 +34,8 @@ public class Health : MonoBehaviour {
             currentHealth = maxHealth;
         }
         previousHealth = currentHealth;
+
+        SendDeathEventIfDead();
     }
 
     // Update is called once per frame
@@ -38,6 +52,8 @@ public class Health : MonoBehaviour {
         if (temp != currentHealth) { //There was a change in health.
             previousHealth = temp;
         }
+
+        SendDeathEventIfDead();
     }
 
     public void SetMaxHealth(int _maxHealth) {
@@ -53,6 +69,8 @@ public class Health : MonoBehaviour {
         if (tempMax != maxHealth) { //There was a change in max health.
             previousMaxHealth = tempMax;
         }
+
+        SendDeathEventIfDead();
     }
 
     public int GetMaxHealth() {
@@ -72,6 +90,8 @@ public class Health : MonoBehaviour {
         if (temp != currentHealth) { //There was a change in health.
             previousHealth = temp;
         }
+
+        SendDeathEventIfDead();
     }
 
     public void IncreaseHealth(int _healthGain) {
@@ -84,6 +104,8 @@ public class Health : MonoBehaviour {
         if (temp != currentHealth) { //There was a change in health.
             previousHealth = temp;
         }
+
+        SendDeathEventIfDead();
     }
 
     public int GetPreviousHealth() {

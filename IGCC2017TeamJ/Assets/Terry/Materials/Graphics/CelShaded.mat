@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: CelShaded
-  m_Shader: {fileID: 4800000, guid: cabbc0de3d63e2f4996aab2553fd49f5, type: 3}
+  m_Shader: {fileID: 4800000, guid: 89607e9445e7eaf40940e16dc1fb184c, type: 3}
   m_ShaderKeywords: _ISORTHOGRAPHIC_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0

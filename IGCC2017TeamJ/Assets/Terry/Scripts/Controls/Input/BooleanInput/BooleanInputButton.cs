@@ -22,19 +22,14 @@ public class BooleanInputButton : BooleanInput {
         switch (_buttonState) {
             case ButtonState.ButtonState_OnDown:
                 return Input.GetButtonDown(inputName);
-                break;
             case ButtonState.ButtonState_OnUp:
                 return Input.GetButtonUp(inputName);
-                break;
             case ButtonState.ButtonState_StayUp:
                 return !Input.GetButton(inputName);
-                break;
             case ButtonState.ButtonState_StayDown:
                 return Input.GetButton(inputName);
-                break;
             default:
                 return false;
-                break;
         }
     }
 

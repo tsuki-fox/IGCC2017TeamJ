@@ -8,11 +8,11 @@ public class HealthItem : MonoBehaviour {
     private int healValue = 20;
 
     private void RegisterEvents() {
-        PlayerChannel.GetInstance().ResetItemsEvent += ResetItem;
+        GameplayChannel.GetInstance().ResetItemsEvent += ResetItem;
     }
 
     private void UnregisterEvents() {
-        PlayerChannel.GetInstance().ResetItemsEvent -= ResetItem;
+        GameplayChannel.GetInstance().ResetItemsEvent -= ResetItem;
     }
 
     private void Awake() {

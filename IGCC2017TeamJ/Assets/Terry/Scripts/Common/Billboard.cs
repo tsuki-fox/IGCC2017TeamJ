@@ -14,7 +14,7 @@ public class Billboard : MonoBehaviour {
 	}
 
 	public BILLBOARD_AXIS billboardAxis;
-	public Camera camera;
+	public Camera mainCamera;
 	public bool reverseDirection;
 
 	// Use this for initialization
@@ -23,11 +23,11 @@ public class Billboard : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (camera == null) {
+		if (mainCamera == null) {
 			if (Camera.main == null) {
 				return;
 			}
-			camera = Camera.main;
+            mainCamera = Camera.main;
 		}
 
 		//This is the position we want to look at.
@@ -37,13 +37,13 @@ public class Billboard : MonoBehaviour {
 		//If we want to face towards the camera, don't we need to face the opposite of where the camera is pointing?
 		//Alright, apparently this is cause Unity's Quad faces the wrong way.
 		if (reverseDirection) {
-            targetPosition = transform.position + (camera.transform.rotation * Vector3.back);
+            targetPosition = transform.position + (mainCamera.transform.rotation * Vector3.back);
 		} else {
-            targetPosition = transform.position + (camera.transform.rotation * Vector3.forward);
+            targetPosition = transform.position + (mainCamera.transform.rotation * Vector3.forward);
         }
 
 		//Rotate our up axis by the quaternion.
-		Vector3 targetOrientation = camera.transform.rotation * GetAxis();
+		Vector3 targetOrientation = mainCamera.transform.rotation * GetAxis();
 		gameObject.GetComponent<Transform>().LookAt(targetPosition, targetOrientation);
 	}
 

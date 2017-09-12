@@ -10,7 +10,7 @@ public class AxisAlignedBillboard : MonoBehaviour {
 	}
 
 	public BILLBOARD_AXIS billboardAxis;
-	public Camera camera;
+	public Camera mainCamera;
 
 	// Use this for initialization
 	void Start () {	
@@ -18,14 +18,14 @@ public class AxisAlignedBillboard : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (camera == null) {
-			camera = Camera.main;
-			if (camera == null) {
+		if (mainCamera == null) {
+			mainCamera = Camera.main;
+			if (mainCamera == null) {
 				return;
 			}
 		}
 
-		Vector3 direction = camera.transform.position - gameObject.transform.position;
+		Vector3 direction = mainCamera.transform.position - gameObject.transform.position;
 		Quaternion rotation = Quaternion.LookRotation(direction);
 		Vector3 rotationEulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
 
