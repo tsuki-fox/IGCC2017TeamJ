@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using System.Linq;
 using FlowAI;
 
@@ -19,7 +20,6 @@ namespace FlowAI
 				this.rect = rect;
 			}
 		}
-
 
 		[SerializeField]
 		FlowAIBasis _targetBasis = null;
@@ -59,6 +59,10 @@ namespace FlowAI
 			_targetBasis = FindObjectOfType<EnemyControl>()._flowAI;
 		}
 
+		void DrawLines(params Vector2[] args)
+		{
+		}
+
 		void DrawNode(FlowAINode node,Vector2 pos)
 		{
 			//描画済みノードならば終了
@@ -91,7 +95,6 @@ namespace FlowAI
 				style.normal = styleState;
 
 				GUI.Label(nodeRect, "LID:" + node.localId, style);
-				
 
 				if(node.GetNextNode()!=null)
 				{
@@ -218,6 +221,15 @@ namespace FlowAI
 					GUIUtility.RotateAroundPivot(90f, falseEnd);
 					GUI.DrawTexture(falseEndRect, _arrowHeadTex);
 					GUI.matrix = Matrix4x4.identity;
+
+					//分岐線
+					if (branch == _targetBasis.currentNode && branch.GetNextNode() == branch.falseNode)
+					{
+					}
+					else
+					{
+
+					}
 				}
 			}
 		}
@@ -230,6 +242,8 @@ namespace FlowAI
 			DrawNode(_targetBasis.entryPointNode, new Vector2(10f, 10f));
 
 			DrawLines();
+			
+			Handles.DrawLine(Vector3.zero, new Vector3(100f, 100f));
 		}
 	}
 }

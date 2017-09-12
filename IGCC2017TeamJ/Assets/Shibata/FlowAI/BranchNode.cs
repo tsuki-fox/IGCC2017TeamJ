@@ -23,23 +23,23 @@ namespace FlowAI
 		#endregion
 
 		#region properties
-		/// <summary>結果が真の場合の遷移先ノード</summary>
+		/// <summary>結果が真の場合の遷移先ノード Next node.In case of true.</summary>
 		public FlowAINode trueNode { get { return _trueNode; } set { _trueNode = value; } }
-		/// <summary>結果が偽の場合の遷移先ノード</summary>
+		/// <summary>結果が偽の場合の遷移先ノード Next node.In case of false.</summary>
 		public FlowAINode falseNode { get { return _falseNode; } set { _falseNode = value; } }
-		/// <summary>結果が真の場合の遷移時間</summary>
+		/// <summary>結果が真の場合の遷移時間 Transition duration.In case of true.</summary>
 		public float trueDuration { get { return _trueDuration; } set { _trueDuration = value; } }
-		/// <summary>結果が偽の場合の遷移時間</summary>
+		/// <summary>結果が偽の場合の遷移時間 Transition duration.In case of false.</summary>
 		public float falseDuration { get { return _falseDuration; } set { _falseDuration = value; } }
 		#endregion
 
 		#region public methods
-		/// <summary>初期化</summary>
-		/// <param name="trueNode">結果が真の場合の遷移先ノード</param>
-		/// <param name="trueDuration">結果が真の場合の遷移時間</param>
-		/// <param name="falseNode">結果が偽の場合の遷移先ノード</param>
-		/// <param name="falseDuration">結果が偽の場合の遷移先ノード</param>
-		/// <param name="pred">叙述関数</param>
+		/// <summary>初期化 Initialize.</summary>
+		/// <param name="trueNode">結果が真の場合の遷移先ノード Next node.In case of true.</param>
+		/// <param name="trueDuration">結果が真の場合の遷移時間 Transition duration.In case of true.</param>
+		/// <param name="falseNode">結果が偽の場合の遷移先ノード Next node.In case of false.</param>
+		/// <param name="falseDuration">結果が偽の場合の遷移先ノード Transition duration.In case of false.</param>
+		/// <param name="pred">叙述関数 Predicate function.</param>
 		public void Initialize(FlowAINode trueNode,float trueDuration,FlowAINode falseNode,float falseDuration,Predicate pred)
 		{
 			_trueNode = trueNode;
@@ -53,7 +53,7 @@ namespace FlowAI
 		#endregion
 
 		#region overrides
-		/// <summary>処理</summary>
+		/// <summary>処理 Processing.</summary>
 		public override void Processing()
 		{
 			if (predicate())
@@ -68,7 +68,7 @@ namespace FlowAI
 			}
 		}
 
-		/// <summary>次のノードを取得</summary>
+		/// <summary>次のノードを取得 Get next node.</summary>
 		/// <returns></returns>
 		public override FlowAINode GetNextNode()
 		{

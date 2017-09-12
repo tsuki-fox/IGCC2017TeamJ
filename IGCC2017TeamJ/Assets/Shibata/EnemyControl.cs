@@ -5,7 +5,6 @@ using FlowAI;
 
 public class EnemyControl : MonoBehaviour
 {
-
 	public FlowAIBasis _flowAI;
 
 	bool _isRot = false;
@@ -26,10 +25,10 @@ public class EnemyControl : MonoBehaviour
 	// Use this for initialization
 	void Awake ()
 	{
-		//FlowAI初期化
+		//FlowAI生成 Create FlowAI.
 		_flowAI = new FlowAIBasis();
 
-		//ノード生成
+		//ノード生成 Create nodes.
 		var rotNode = new ProcessNode();
 		var foundBranch = new BranchNode();
 		var missingBranch = new BranchNode();
@@ -38,7 +37,7 @@ public class EnemyControl : MonoBehaviour
 		var stopAlertNode = new ProcessNode();
 		var stopRotNode = new ProcessNode();
 
-		//ノード初期化
+		//ノード初期化 Initialize nodes.
 		rotNode.Initialize(0.1f, foundBranch, () => _isRot = true);
 		stopRotNode.Initialize(0.1f, missingBranch, () => _isRot = false);
 
@@ -48,22 +47,24 @@ public class EnemyControl : MonoBehaviour
 		alertNode.Initialize(0.1f, stopRotNode, () => Debug.Log("Alert!"));
 		stopAlertNode.Initialize(0.1f, rotNode, () => Debug.Log("Alert stopped"));
 
-		//ノード追加
+		//ノード追加 Add nodes at FlowAIBasis.
 		_flowAI.AddNode(rotNode, foundBranch, missingBranch, alertNode, stopAlertNode, stopRotNode);
 
-		//エントリポイントの次のノードを設定
+		//エントリポイントの次のノードを設定 Setting next node for entry point node.
 		_flowAI.entryPointNode.nextNode = rotNode;
 
-		//AI開始
+		//AI開始 Transition entry point.
 		_flowAI.Entry();
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		//更新処理
+		//更新処理 Update.
 		_flowAI.Update(Time.deltaTime);
 
+
+		//Any process...
 		if (_isRot)
 		{
 			this.transform.Rotate(new Vector3(0f, 60f * Time.deltaTime));
