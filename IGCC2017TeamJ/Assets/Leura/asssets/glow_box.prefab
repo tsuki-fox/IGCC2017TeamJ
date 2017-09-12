@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4086193127006598}
   - component: {fileID: 33725613018786914}
-  - component: {fileID: 65742679976685156}
+  - component: {fileID: 135638210729459020}
   - component: {fileID: 23300895578409810}
   m_Layer: 0
   m_Name: glow_box
@@ -36,8 +36,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1396010549528944}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -89.6, y: -74.8, z: 158.4}
-  m_LocalScale: {x: 7.2004733, y: 7.2004795, z: 7.2004795}
+  m_LocalPosition: {x: 18.623161, y: -46.1, z: 85.84622}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -80,9 +80,9 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1396010549528944}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &65742679976685156
-BoxCollider:
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!135 &135638210729459020
+SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -91,5 +91,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
