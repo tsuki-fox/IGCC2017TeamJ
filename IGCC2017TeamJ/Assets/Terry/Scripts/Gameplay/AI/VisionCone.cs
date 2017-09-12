@@ -6,6 +6,9 @@ using UnityEngine.Assertions;
 [System.Serializable]
 public class VisionCone {
 
+    [SerializeField]
+    private List<string> obstacleTags;
+
     [SerializeField, Range(0.0f, 180.0f)]
     private float viewAngle = 45.0f;
     [SerializeField, Range(0, 9999999)]
@@ -33,6 +36,10 @@ public class VisionCone {
     }
 
     public VisionCone() {
+    }
+
+    public List<string> GetObstacleTags() {
+        return obstacleTags;
     }
 
     public void SetViewAngle(float _viewAngle, bool _createVisionConeMesh = false) {
@@ -159,11 +166,14 @@ public class VisionCone {
         // Distance check
         Vector3 targetDirection = target.transform.position - source.transform.position;
         if (targetDirection.sqrMagnitude > viewDistance * viewDistance) {
-            Debug.Log("VisionCone::IsTargetInVisionCone - Target direction too far!");
+            Debug.Log("VisionCone::IsTargetInVisionCone - Target is too far!");
             return false;
+        } else {
+            //Debug.Log(targetDirection.magnitude);
         }
 
-        Vector3.Normalize(targetDirection);
+        // Angle Check
+        targetDirection.Normalize();
         float dotProduct = Vector3.Dot(source.transform.forward, targetDirection);
         float angleTotarget = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
         if (angleTotarget > viewAngle) {
@@ -173,13 +183,29 @@ public class VisionCone {
             Debug.Log("VisionCone::IsTargetInVisionCone - Direction To Target is " + targetDirection);
             Debug.Log("VisionCone::IsTargetInVisionCone - Source's Forward Vector is " + source.transform.forward);
             return false;
+        } else {
+            Debug.Log(dotProduct);
         }
-        
+
+        // Check that there is nothing blocking the view.
+        float raycastDistance = (target.transform.position - source.transform.position).magnitude;
+        RaycastHit[] result = Physics.RaycastAll(source.transform.position, targetDirection, raycastDistance);
+        for (int i = 0; i < result.Length; ++i) {
+            Collider hitCollider = result[i].collider;
+            GameObject hitGameObject = hitCollider.gameObject;
+
+            for (int j = 0; j < obstacleTags.Count; ++j) {
+                if (hitGameObject.tag == obstacleTags[j]) {
+                    return false;
+                }
+            }
+        }
+
         return true;
 	}
 
     public void CreateVisionConeMesh() {
-        Debug.Log("VisionCone::CreateVisionConeMesh");
+        //Debug.Log("VisionCone::CreateVisionConeMesh");
 
         if (coneMeshRenderer == null || coneMeshFilter == null) {
             Debug.Log("VisionCone::CreateVisionConeMesh - MeshRenderer or MeshFilter is missing!");
