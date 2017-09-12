@@ -10,7 +10,6 @@
 		_UnlitVolume("Unlit Volume", Range(0, 1)) = 0.2
 		_Brightness("Brightness", Float) = 1
 		_LightingLevels("Lighting Levels", Int) = 3
-		[Toggle]_IsOrthographic("Is Orthographic", Int) = 1
 	}
 
 	SubShader {
@@ -54,7 +53,6 @@
 		float _UnlitVolume;
 		float _Brightness;
 		int _LightingLevels;
-		int _IsOrthographic;
 
 		half4 LightingCelShadingForward(SurfaceOutput s, half3 lightDir, half atten) {
 			// Forward Vector of the Camera
