@@ -223,7 +223,7 @@ public class VisionCone {
             numSlices = 3;
         }
 
-        Vector2[] uvs = { new Vector2() }; // No UVs. No fucking way I'm supporting textures for this shit.
+        //Vector2[] uvs = { new Vector2() }; // No UVs. No fucking way I'm supporting textures for this shit.
         List<Vector3> vertexList = new List<Vector3>();
         List<int> triangleList = new List<int>();
 

@@ -76,6 +76,14 @@ public class EnemyControl_Patrol : MonoBehaviour
     // For detecting if we saw the player enter the hiding spot (e.g. Bush).
     private bool canSeePlayerPrevious = false;
 
+    // For alerts
+    private int chaseNodeId;
+    [SerializeField]
+    private bool ignoreAlert = false;
+    // We will receive the alert if we are less or equal to this distance away from the player.
+    [SerializeField, Range(0.0f, 100.0f)]
+    private float alertDistance = 50.0f;
+
     // State Machine
     enum AIState {
         AIState_None,
@@ -104,23 +112,37 @@ public class EnemyControl_Patrol : MonoBehaviour
     }
 
     void PlayerSpottedEvent(Vector3 _playerPosition) {
+        if (ignoreAlert) {
+            return;
+        }
+        if (GameplayHelper.GetSquaredDistanceBetween(_playerPosition, gameObject.transform.position) > alertDistance * alertDistance) {
+            return;
+        }
+
+        Debug.Log("PlayerSpottedEvent");
         lastKnownPlayerPosition = _playerPosition;
+
+        // We already see the player.
+        if (canSeePlayerPrevious) {
+            return;
+        }
+        
+        chaseGiveUpTimer = chaseGiveUpDuration;
+        flowAI.Swap(chaseNodeId, flowAI.currentNode.localId);
+        flowAI.Transition(chaseNodeId);
     }
 
 	// Use this for initialization
 	void Awake () {
-        // Initialise events.
-        InitEvents();
-
         //FlowAI生成 Create FlowAI.
         Assert.AreNotEqual(GetComponent<FlowAIHolder>(), null);
         flowAI = GetComponent<FlowAIHolder>().flowAI;
 
+        ProcessNode chaseNode = new ProcessNode();
+        ProcessNode explodeNode = new ProcessNode();
         ProcessNode alertNode = new ProcessNode();
         ProcessNode patrolMoveNode = new ProcessNode();
         ProcessNode patrolReachedNode = new ProcessNode();
-        ProcessNode chaseNode = new ProcessNode();
-        ProcessNode explodeNode = new ProcessNode();
 
         BranchNode canSeePlayerNode = new BranchNode();
         BranchNode playerInExplosionRangeNode = new BranchNode();
@@ -146,7 +168,12 @@ public class EnemyControl_Patrol : MonoBehaviour
 
         //AI開始 Transition entry point.
         flowAI.Entry();
-	}
+
+        chaseNodeId = chaseNode.localId;
+
+        // Initialise events.
+        InitEvents();
+    }
 
     private void OnDestroy() {
         DeinitEvents();
@@ -176,14 +203,14 @@ public class EnemyControl_Patrol : MonoBehaviour
         switch (currentState) {
             case AIState.AIState_Patrol:
                 Patrol();
-                Debug.Log(gameObject.name + "'s current state is PATROL.");
+                //Debug.Log(gameObject.name + "'s current state is PATROL.");
                 break;
             case AIState.AIState_Chase:
-                Debug.Log(gameObject.name + "'s current state is CHASE.");
+                //Debug.Log(gameObject.name + "'s current state is CHASE.");
                 Chase(canSeePlayer);
                 break;
             case AIState.AIState_Explode:
-                Debug.Log(gameObject.name + "'s current state is EXPLODE.");
+                //Debug.Log(gameObject.name + "'s current state is EXPLODE.");
                 エクスプロージョン();
                 break;
             default:
