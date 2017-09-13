@@ -8,11 +8,15 @@ public class GameplayChannel : EventChannel {
 
     // Delegates
     public delegate void Void_CharacterDeathInfo(CharacterDeathInfo _info);
+    public delegate void Void_GameObject(GameObject _gameObject);
 
     // Events
     public event Void_CharacterDeathInfo PlayerDeathEvent;
     public event Void_Void ResetItemsEvent;
     public event Void_Bool PlayerHidingEvent;
+
+    public event Void_Void RequestPlayerEvent; // 主人公は誰ですか。
+    public event Void_GameObject ReplyPlayerEvent;　// 私！
 
     // Event Sending
     public void SendPlayerDeathEvent(CharacterDeathInfo _info) {
@@ -30,6 +34,18 @@ public class GameplayChannel : EventChannel {
     public void SendPlayerHidingEvent(bool _isHiding) {
         if (PlayerHidingEvent != null) {
             PlayerHidingEvent(_isHiding);
+        }
+    }
+
+    public void SendRequestPlayerEvent() {
+        if (RequestPlayerEvent != null) {
+            RequestPlayerEvent();
+        }
+    }
+
+    public void SendReplyPlayerEvent(GameObject _player) {
+        if (ReplyPlayerEvent != null) {
+            ReplyPlayerEvent(_player);
         }
     }
 
