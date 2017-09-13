@@ -25,15 +25,33 @@ public class EnemyControl_Patrol : MonoBehaviour
     [SerializeField]
     private float chaseVelocity = 10.0f;
     
+    enum AttackType {
+        AttackType_Shoot,
+        AttackType_Explode
+    }
+
+    [SerializeField]
+    private AttackType attackType = AttackType.AttackType_Shoot;
+
+    [SerializeField]
+    private float attackRange = 5.0f;
+
     // Explosion
     [SerializeField]
     private GameObject explosionObject;
     [SerializeField]
     private int explosionDamage = 50;
     [SerializeField]
-    private float explosionRange = 5.0f;
-    [SerializeField]
     private List<string> explosionBlockerTags;
+
+    // Shooting
+    [SerializeField]
+    private GameObject bulletObject;
+    [SerializeField, Range(0.0f, 999999.0f)]
+    private float fireRate = 0.5f;
+    private float fireTimer = 0.0f;
+    [SerializeField]
+    private Vector3 bulletSpawnOffset = new Vector3(0, 0, 1);
 
     // 到達するノードにどれくらい近づける必要があるか。
     // How close to the node we need to be to be considered reaching it.
@@ -57,10 +75,10 @@ public class EnemyControl_Patrol : MonoBehaviour
     private float patrolViewAngle = 30.0f;
     [SerializeField]
     // あなたは距離を見ることができます (追)
-    private float chaseViewDistance = 20.0f;
+    private float combatViewDistance = 20.0f;
     // あなたは角度を見ることができます （追）
     [SerializeField]
-    private float chaseViewAngle = 60.0f;
+    private float combatViewAngle = 60.0f;
 
     [SerializeField]
     // 主人公お見ていますのMaterial
@@ -89,7 +107,8 @@ public class EnemyControl_Patrol : MonoBehaviour
         AIState_None,
         AIState_Patrol,
         AIState_Chase,
-        AIState_Explode
+        AIState_Explode,
+        AIState_Shoot,
     }
 
     // 現のフレームの状態
@@ -140,28 +159,41 @@ public class EnemyControl_Patrol : MonoBehaviour
 
         ProcessNode chaseNode = new ProcessNode();
         ProcessNode explodeNode = new ProcessNode();
+        ProcessNode shootNode = new ProcessNode();
         ProcessNode alertNode = new ProcessNode();
         ProcessNode patrolMoveNode = new ProcessNode();
         ProcessNode patrolReachedNode = new ProcessNode();
 
         BranchNode canSeePlayerNode = new BranchNode();
-        BranchNode playerInExplosionRangeNode = new BranchNode();
+        BranchNode playerInAttackRangeNode = new BranchNode();
         BranchNode checkReachedWaypointNode = new BranchNode();
         BranchNode checkPlayerEscapedNode = new BranchNode();
 
         canSeePlayerNode.Initialize(alertNode, 0.0f, checkReachedWaypointNode, 0.0f, CanSeePlayer);
-        alertNode.Initialize(0.0f, playerInExplosionRangeNode, AlertNodeFunction);
+        alertNode.Initialize(0.0f, playerInAttackRangeNode, AlertNodeFunction);
         checkReachedWaypointNode.Initialize(patrolReachedNode, 0.0f, patrolMoveNode, 0.0f, CheckReachedWaypoint);
 
-        playerInExplosionRangeNode.Initialize(explodeNode, 0.0f, chaseNode, 0.0f, PlayerInExplosionRange);
         explodeNode.Initialize(0.0f, null, ExplodeNodeFunction);
+        shootNode.Initialize(1.0f, playerInAttackRangeNode, ShootNodeFunction);
         chaseNode.Initialize(0.0f, checkPlayerEscapedNode, ChaseNodeFunction);
-        checkPlayerEscapedNode.Initialize(canSeePlayerNode, 0.0f, playerInExplosionRangeNode, 0.0f, CheckPlayerEscaped);
+        checkPlayerEscapedNode.Initialize(canSeePlayerNode, 0.0f, playerInAttackRangeNode, 0.0f, CheckPlayerEscaped);
 
         patrolMoveNode.Initialize(0.0f, canSeePlayerNode, PatrolMoveNodeFunction);
         patrolReachedNode.Initialize(0.0f, canSeePlayerNode, PatrolReachedNodeFunction);
 
-        flowAI.AddNode(alertNode, patrolMoveNode, patrolReachedNode, chaseNode, explodeNode, canSeePlayerNode, playerInExplosionRangeNode, checkReachedWaypointNode, checkPlayerEscapedNode);
+        switch (attackType) {
+            case AttackType.AttackType_Explode:
+                playerInAttackRangeNode.Initialize(explodeNode, 0.0f, chaseNode, 0.0f, PlayerInAttackRange);
+                break;
+            case AttackType.AttackType_Shoot:
+                playerInAttackRangeNode.Initialize(shootNode, 0.0f, chaseNode, 0.0f, PlayerInAttackRange);
+                break;
+            default:
+                break;
+        }
+        
+
+        flowAI.AddNode(alertNode, patrolMoveNode, patrolReachedNode, chaseNode, explodeNode, canSeePlayerNode, playerInAttackRangeNode, checkReachedWaypointNode, checkPlayerEscapedNode, shootNode);
 
         //エントリポイントの次のノードを設定 Setting next node for entry point node.
         flowAI.entryPointNode.nextNode = canSeePlayerNode;
@@ -188,6 +220,8 @@ public class EnemyControl_Patrol : MonoBehaviour
     // Update is called once per frame
     void Update ()
 	{
+        fireTimer = Mathf.Max(0.0f, fireTimer - Time.deltaTime);
+
         //Check if we know who the player is.
         if (player == null) {
             Debug.Log("EnemyControl_Patrol::Update - No Player!");
@@ -212,6 +246,9 @@ public class EnemyControl_Patrol : MonoBehaviour
             case AIState.AIState_Explode:
                 //Debug.Log(gameObject.name + "'s current state is EXPLODE.");
                 エクスプロージョン();
+                break;
+            case AIState.AIState_Shoot:
+                Shoot();
                 break;
             default:
                 // Do nothing.
@@ -270,8 +307,8 @@ public class EnemyControl_Patrol : MonoBehaviour
 
     // 追
     void Chase(bool canSeePlayer) {
-        visionCone.SetViewAngle(chaseViewAngle);
-        visionCone.SetViewDistance(chaseViewDistance, true);
+        visionCone.SetViewAngle(combatViewAngle);
+        visionCone.SetViewDistance(combatViewDistance, true);
 
         // Give up the chase if we run out of time and cannot see the player.
         if (canSeePlayer) {
@@ -298,7 +335,7 @@ public class EnemyControl_Patrol : MonoBehaviour
 
         // Deal damage to the player.
         Vector3 directionToPlayer = player.transform.position - gameObject.transform.position;
-        if (directionToPlayer.sqrMagnitude <= explosionRange) {
+        if (directionToPlayer.sqrMagnitude <= attackRange) {
             // Raycast to ensure that nothing is blocking the explosion.
             if (!GameplayHelper.HasObstaclesBetween(gameObject.transform.position, player.transform.position, explosionBlockerTags)) {
                 Health playerHealth = player.GetComponent<Health>();
@@ -309,6 +346,28 @@ public class EnemyControl_Patrol : MonoBehaviour
 
         // Kill this gameobject.
         gameObject.SetActive(false);
+    }
+
+    void Shoot() {
+        Assert.AreNotEqual(bulletObject, null);
+
+        // Stop moving and look at the player.
+        MoveTowards(gameObject.transform.position, 0.0f);
+        RotateTowards(lastKnownPlayerPosition);
+        if (fireTimer <= 0.0f) {
+            GameObject bullet = GameObject.Instantiate(bulletObject);
+            Bullet bulletComponent = bullet.GetComponent<Bullet>();
+
+            Assert.AreNotEqual(bulletComponent, null);
+
+            bullet.transform.position = transform.position;
+            bullet.transform.position += bulletSpawnOffset.x * transform.right;
+            bullet.transform.position += bulletSpawnOffset.y * transform.up;
+            bullet.transform.position += bulletSpawnOffset.z * transform.forward;
+            bullet.transform.rotation = transform.rotation;
+
+            fireTimer = 1.0f / fireRate;
+        }
     }
 
     // Helper Functions
@@ -361,12 +420,12 @@ public class EnemyControl_Patrol : MonoBehaviour
         return result;
     }
 
-    bool PlayerInExplosionRange() {
-        Debug.Log("PlayerInExplosionRange");
+    bool PlayerInAttackRange() {
+        Debug.Log("PlayerInAttackRange");
         Assert.AreNotEqual(player, null);
 
         if (CanSeePlayer()) {
-            return GameplayHelper.GetSquaredDistanceBetween(lastKnownPlayerPosition, gameObject.transform.position) < explosionRange * explosionRange;
+            return GameplayHelper.GetSquaredDistanceBetween(lastKnownPlayerPosition, gameObject.transform.position) < attackRange * attackRange;
         }
 
         return false;
@@ -427,6 +486,14 @@ public class EnemyControl_Patrol : MonoBehaviour
     void ExplodeNodeFunction() {
         Debug.Log("ExplodeNodeFunction");
         currentState = AIState.AIState_Explode;
+    }
+
+    // 射
+    void ShootNodeFunction() {
+        Debug.Log("ShootNodeFunction");
+        visionCone.SetViewAngle(combatViewAngle);
+        visionCone.SetViewDistance(combatViewDistance, true);
+        currentState = AIState.AIState_Shoot;
     }
 
 }

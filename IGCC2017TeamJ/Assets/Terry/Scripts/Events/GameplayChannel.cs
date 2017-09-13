@@ -13,6 +13,7 @@ public class GameplayChannel : EventChannel {
 
     // Events
     public event Void_CharacterDeathInfo PlayerDeathEvent;
+    public event Void_CharacterDeathInfo EnemyDeathEvent;
     public event Void_Void ResetItemsEvent;
     public event Void_Bool PlayerHidingEvent;
 
@@ -25,6 +26,12 @@ public class GameplayChannel : EventChannel {
     public void SendPlayerDeathEvent(CharacterDeathInfo _info) {
         if (PlayerDeathEvent != null) {
             PlayerDeathEvent(_info);
+        }
+    }
+
+    public void SendEnemyDeathEvent(CharacterDeathInfo _info) {
+        if (EnemyDeathEvent != null) {
+            EnemyDeathEvent(_info);
         }
     }
 

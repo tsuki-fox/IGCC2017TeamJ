@@ -470,6 +470,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114907258601540496, guid: c0c17152ddf97bd488f96245e4975b6b,
+        type: 2}
+      propertyPath: waypoints.Array.size
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4967557282005286, guid: c0c17152ddf97bd488f96245e4975b6b, type: 2}
       propertyPath: m_LocalPosition.x
       value: -46.5
@@ -522,6 +527,15 @@ Prefab:
       propertyPath: waypoints.Array.data[3]
       value: 
       objectReference: {fileID: 1399193982}
+    - target: {fileID: 114907258601540496, guid: c0c17152ddf97bd488f96245e4975b6b,
+        type: 2}
+      propertyPath: attackType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1990432700055930, guid: c0c17152ddf97bd488f96245e4975b6b, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c0c17152ddf97bd488f96245e4975b6b, type: 2}
   m_IsPrefabParent: 0
@@ -764,6 +778,7 @@ MonoBehaviour:
   startWithMaxHealth: 0
   currentHealth: 50
   maxHealth: 100
+  deathEvent: 0
 --- !u!114 &641753747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1015,7 +1030,7 @@ Transform:
   - {fileID: 2047071751}
   - {fileID: 1399193982}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1191806971
 GameObject:
@@ -1408,6 +1423,87 @@ MonoBehaviour:
   minAlpha: 0.25
   maxAlpha: 1
   alphaChangeSpeed: 1
+--- !u!1001 &1708559264
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 114907258601540496, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c,
+        type: 2}
+      propertyPath: waypoints.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4967557282005286, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -49.436
+      objectReference: {fileID: 0}
+    - target: {fileID: 4967557282005286, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.88
+      objectReference: {fileID: 0}
+    - target: {fileID: 4967557282005286, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 2.6485136
+      objectReference: {fileID: 0}
+    - target: {fileID: 4967557282005286, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4967557282005286, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4967557282005286, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4967557282005286, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4967557282005286, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c, type: 2}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1990432700055930, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114907258601540496, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c,
+        type: 2}
+      propertyPath: waypoints.Array.data[0]
+      value: 
+      objectReference: {fileID: 1399193982}
+    - target: {fileID: 114907258601540496, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c,
+        type: 2}
+      propertyPath: waypoints.Array.data[1]
+      value: 
+      objectReference: {fileID: 2047071751}
+    - target: {fileID: 114907258601540496, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c,
+        type: 2}
+      propertyPath: attackRange
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114907258601540496, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c,
+        type: 2}
+      propertyPath: bulletSpawnOffset.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114907258601540496, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c,
+        type: 2}
+      propertyPath: combatViewDistance
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 114907258601540496, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c,
+        type: 2}
+      propertyPath: fireRate
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 23b74f4b44f9e1a4e9d88a1c33ef350c, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1001 &1977923465
 Prefab:
   m_ObjectHideFlags: 0

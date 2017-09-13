@@ -13,6 +13,14 @@ public class Health : MonoBehaviour {
     private int maxHealth = 100;
     private int previousMaxHealth;
 
+    enum DeathEvent {
+        DeathEvent_Enemy,
+        DeathEvent_Player
+    }
+
+    [SerializeField]
+    private DeathEvent deathEvent = DeathEvent.DeathEvent_Enemy;
+
     void SendDeathEventIfDead() {
         if (IsDead()) {
             CharacterDeathInfo info;
@@ -20,7 +28,17 @@ public class Health : MonoBehaviour {
             info.tag = gameObject.tag;
             info.deathPosition = gameObject.transform.position;
 
-            GameplayChannel.GetInstance().SendPlayerDeathEvent(info);
+            switch (deathEvent) {
+                case DeathEvent.DeathEvent_Enemy:
+                    GameplayChannel.GetInstance().SendEnemyDeathEvent(info);
+                    break;
+                case DeathEvent.DeathEvent_Player:
+                    GameplayChannel.GetInstance().SendPlayerDeathEvent(info);
+                    break;
+                default:
+                    break;
+            }
+            
         }
     }
 

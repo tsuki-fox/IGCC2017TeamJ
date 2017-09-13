@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 114360785961316302}
   - component: {fileID: 195839805341598304}
   m_Layer: 0
-  m_Name: Test Patrol Enemy
+  m_Name: Test Guard Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39,7 +39,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1990432700055930}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -46.5, y: 3.49, z: 0}
+  m_LocalPosition: {x: -49.436, y: 0.88, z: 2.6485136}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -130,13 +130,14 @@ MonoBehaviour:
   waypoints: []
   patrolVelocity: 5
   chaseVelocity: 5
-  attackType: 1
-  attackRange: 5
+  attackType: 0
+  attackRange: 20
   explosionObject: {fileID: 120276, guid: dc136522a4cb90e45bc9298bf0214aec, type: 2}
   explosionDamage: 25
   explosionBlockerTags:
   - Wall
-  bulletObject: {fileID: 0}
+  bulletObject: {fileID: 1454025898530168, guid: dbe6ddd661ebc4846b4f536872026830,
+    type: 2}
   fireRate: 0.5
   bulletSpawnOffset: {x: 0, y: 0, z: 1}
   distanceToWaypoint: 3
@@ -151,7 +152,7 @@ MonoBehaviour:
     type: 2}
   patrolCannotSeePlayerMaterial: {fileID: 2100000, guid: 04f98ec1472a9324b86ad5c3084e6dd4,
     type: 2}
-  ignoreAlert: 0
+  ignoreAlert: 1
   alertDistance: 50
 --- !u!195 &195839805341598304
 NavMeshAgent:
