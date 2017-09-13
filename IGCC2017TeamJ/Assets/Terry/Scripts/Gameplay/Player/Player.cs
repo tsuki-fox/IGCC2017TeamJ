@@ -10,6 +10,18 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private string[] hideableTags;
 
+    void InitEvents() {
+        GameplayChannel.GetInstance().RequestPlayerEvent += RequestPlayerEvent;
+    }
+
+    void DeinitEvents() {
+        GameplayChannel.GetInstance().RequestPlayerEvent -= RequestPlayerEvent;
+    }
+
+    void RequestPlayerEvent() {
+        GameplayChannel.GetInstance().SendReplyPlayerEvent(gameObject);
+    }
+
     public bool IsHiding() {
         return isHiding;
     }
@@ -22,10 +34,19 @@ public class Player : MonoBehaviour {
         return hideableTags;
     }
 
-	// Use this for initialization
-	void Start () {
+    private void Awake() {
+        InitEvents();
+    }
+
+    private void OnDestroy() {
+        DeinitEvents();
+    }
+
+    // Use this for initialization
+    void Start () {
         Reset();
-	}
+        GameplayChannel.GetInstance().SendReplyPlayerEvent(gameObject);
+    }
 	
 	// Update is called once per frame
 	void Update () {
