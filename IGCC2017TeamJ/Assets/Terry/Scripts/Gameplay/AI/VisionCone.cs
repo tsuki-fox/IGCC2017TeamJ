@@ -203,9 +203,13 @@ public class VisionCone {
 	}
 
     public void CreateVisionConeMesh() {
+        CreateVisionConeMesh(coneMeshFilter, coneMeshRenderer);
+    }
+
+    public void CreateVisionConeMesh(MeshFilter _meshFilter, MeshRenderer _meshRenderer) {
         //Debug.Log("VisionCone::CreateVisionConeMesh");
 
-        if (coneMeshRenderer == null || coneMeshFilter == null) {
+        if (_meshRenderer == null || _meshFilter == null) {
             Debug.Log("VisionCone::CreateVisionConeMesh - MeshRenderer or MeshFilter is missing!");
             return;
         }
@@ -319,7 +323,7 @@ public class VisionCone {
         }
 
         // Clear the current mesh.
-        coneMeshFilter.mesh.Clear();
+        _meshFilter.mesh.Clear();
 
         // Copy our vertexList into a non dynamic array.
         Vector3[] vertices = new Vector3[vertexList.Count];
@@ -334,13 +338,38 @@ public class VisionCone {
         }
 
         //_meshFilter.mesh.uv = uvs;
-        coneMeshFilter.mesh.vertices = vertices;
-        coneMeshFilter.mesh.triangles = triangles;
+        _meshFilter.mesh.vertices = vertices;
+        _meshFilter.mesh.triangles = triangles;
 
-        coneMeshRenderer.material = coneMaterial;
+        _meshRenderer.material = coneMaterial;
 
-        Color coneColor = coneMeshRenderer.material.color;
+        Color coneColor = _meshRenderer.material.color;
         coneColor.a = coneAlpha;
-        coneMeshRenderer.material.color = coneColor;
+        _meshRenderer.material.color = coneColor;
     }
+
+    public GameObject CreateVisionConeObject(GameObject _source, bool _setAsMeshFilter = true, bool _setAsMeshRenderer = true) {
+        GameObject visionConeObject = new GameObject();
+        visionConeObject.name = _source.name + "のVision Cone";
+
+        visionConeObject.transform.position = _source.transform.position;
+        visionConeObject.transform.rotation = _source.transform.rotation;
+
+        visionConeObject.transform.parent = _source.transform;
+
+        visionConeObject.AddComponent<MeshFilter>();
+        visionConeObject.AddComponent<MeshRenderer>();
+        CreateVisionConeMesh(visionConeObject.GetComponent<MeshFilter>(), visionConeObject.GetComponent<MeshRenderer>());
+
+        if (_setAsMeshFilter) {
+            coneMeshFilter = visionConeObject.GetComponent<MeshFilter>();
+        }
+
+        if (_setAsMeshRenderer) {
+            coneMeshRenderer = visionConeObject.GetComponent<MeshRenderer>();
+        }
+
+        return visionConeObject;
+    }
+
 }
