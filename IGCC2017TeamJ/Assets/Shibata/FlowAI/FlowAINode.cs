@@ -8,7 +8,8 @@ namespace FlowAI
 	{
 		#region private fields
 		int _localId = -1;	//ローカルID
-		float _duration;	//遷移時間
+		float _duration;    //遷移時間
+		string _summary;	//ノードの概要説明用文字列
 		
 		#endregion
 
@@ -31,6 +32,16 @@ namespace FlowAI
 		{
 			get { return _duration; }
 			set { _duration = value; }
+		}
+
+		/// <summary>
+		/// ノード概要の説明用文字列
+		/// characters of node summary.
+		/// </summary>
+		public string summary
+		{
+			get { return _summary; }
+			set { _summary = value; }
 		}
 		#endregion
 

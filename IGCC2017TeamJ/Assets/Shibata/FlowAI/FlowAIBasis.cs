@@ -59,6 +59,8 @@ namespace FlowAI
 		/// Current node.
 		/// </summary>
 		public FlowAINode currentNode { get { return _currentNode; } }
+
+		public float elapsed { get { return _elapsed; } }
 		#endregion
 
 		/// <summary>
@@ -169,6 +171,31 @@ namespace FlowAI
 			{
 				AddNode(item);
 			}
+		}
+
+		/// <summary>ノードを交換する. Swap nodes.</summary>
+		/// <param name="from"></param>
+		/// <param name="to"></param>
+		public void Swap(int from,int to)
+		{
+			var node1 = _nodes.Find(item => item.localId == from);
+			var node2 = _nodes.Find(item => item.localId == to);
+
+			var node1ProcPrevs = _nodes
+				.Select(item => item as ProcessNode)
+				.Where(item => item.nextNode == node1);
+
+			var node1BranchPrevs = _nodes
+				.Select(item => item as BranchNode)
+				.Where(item => item.trueNode == node1 || item.falseNode == node1);
+
+			foreach(var prev in node1ProcPrevs)
+				prev.nextNode = node1;
+			foreach(var prev in node1BranchPrevs)
+			{
+
+			}
+			
 		}
 		#endregion
 	}

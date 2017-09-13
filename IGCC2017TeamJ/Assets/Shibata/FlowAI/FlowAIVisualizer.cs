@@ -9,241 +9,280 @@ namespace FlowAI
 {
 	public class FlowAIVisualizer : MonoBehaviour
 	{
-		struct DrawnData
+		struct PrepareData
 		{
 			public FlowAINode node;
-			public Rect rect;
+			public int depthX;
+			public int depthY;
+			public bool isActive;
 
-			public DrawnData(FlowAINode node ,Rect rect)
+			public PrepareData(FlowAINode node,int depthX,int depthY,bool isActive)
 			{
 				this.node = node;
-				this.rect = rect;
+				this.depthX = depthX;
+				this.depthY = depthY;
+				this.isActive = isActive;
 			}
 		}
 
+		#region private fields
 		[SerializeField]
-		FlowAIBasis _targetBasis = null;
-		[SerializeField]
-		Texture2D _processTex;
-		[SerializeField]
-		Texture2D _branchTex;
-		[SerializeField]
-		Texture2D _arrowHeadTex;
-		[SerializeField]
-		Texture2D _lineTex;
-		[SerializeField]
-		float _nodeSpace = 20f;
-		[SerializeField]
-		Vector2 _beginArrowOffset = Vector2.zero;
-		[SerializeField]
-		Vector2 _endArrowOffset = Vector2.zero;
-		[SerializeField]
-		Vector2 _branchBeginArrowOffset = Vector2.zero;
-		[SerializeField]
-		Vector2 _branchEndArrowOffset = Vector2.zero;
+		FlowAIHolder _target;		//ターゲットAIホルダ
+		FlowAIBasis _targetBasis;	//ターゲットAI
 
 		[SerializeField]
-		float _lineThickness = 1f;
+		Texture2D _processTex;		//処理ノードテクスチャ
 		[SerializeField]
-		Vector2 _lineOffset = Vector2.zero;
+		Texture2D _branchTex;		//分岐ノードテクスチャ
+		[SerializeField]
+		Texture2D _arrowHeadTex;	//矢印テクスチャ
+		[SerializeField]
+		Texture2D _lineTex;         //線テクスチャ
 
 		[SerializeField]
-		Vector2 _nodeSize = new Vector2(100f,33f);
+		Color _nodeColor = Color.white;
 		[SerializeField]
-		float _nodeSizeScale = 1f;
+		Color _activeNodeColor = Color.red;
 
-		List<DrawnData> _drawnNode = new List<DrawnData>();
+		[SerializeField]
+		Vector2 _globalOffset;		//全体のオフセット
 
-		private void Start()
+		[SerializeField]
+		float _nodeVerticalSpace = 20f;		//ノード間の垂直方向の間隔
+		[SerializeField]
+		float _nodeHorizontalSpace = 20f;	//ノード間の水平方向の間隔
+		[SerializeField]
+		Vector2 _nodeSize = new Vector2(100f, 33f); //ノードの大きさ
+
+		[SerializeField]
+		float _lineWidth = 3f;					//線の太さ
+		[SerializeField]
+		Color _lineColor = Color.white;         //線の色
+		[SerializeField]
+		Color _activeLineColor = Color.red;     //アクティブ時の線の色
+
+		List<PrepareData> _prepares = new List<PrepareData>();  //準備済みリスト
+		PrepareData _from;
+		PrepareData _to;
+		#endregion
+
+		void Prepare(FlowAINode node)
 		{
-			_targetBasis = FindObjectOfType<EnemyControl>()._flowAI;
+			_prepares.Clear();
+			Prepare(node, 0, 0);
 		}
 
-		void DrawLines(params Vector2[] args)
+		void Prepare(FlowAINode node,int depthX,int depthY)
 		{
-		}
-
-		void DrawNode(FlowAINode node,Vector2 pos)
-		{
-			//描画済みノードならば終了
-			if (_drawnNode.Exists(item => item.node == node))
+			//準備済みノードならば終了
+			if (_prepares.Exists(item => item.node == node))
 				return;
 
-			Rect nodeRect = new Rect(pos, _nodeSize * _nodeSizeScale);
+			//準備済みリストに追加
+			_prepares.Add(new PrepareData(node, depthX, depthY, _targetBasis.currentNode == node));
 
-			//処理ノード及びエントリーノード
+			//処理ノードかエントリポイントノードならば
 			if(node is ProcessNode || node is FlowAIBasis.EntryPointNode)
 			{
-				_drawnNode.Add(new DrawnData(node, nodeRect));
-
-				if (node == _targetBasis.currentNode)
-				{
-					var temp = GUI.color;
-					GUI.color = Color.red;
-					GUI.DrawTexture(nodeRect, _processTex);
-					GUI.color = temp;
-				}
-				else
-				{
-					GUI.DrawTexture(nodeRect, _processTex);
-				}
-
-				GUIStyle style = new GUIStyle();
-				GUIStyleState styleState = new GUIStyleState();
-				style.fontSize = (int)(_nodeSize.y * _nodeSizeScale);
-				styleState.textColor = Color.white;
-				style.normal = styleState;
-
-				GUI.Label(nodeRect, "LID:" + node.localId, style);
-
-				if(node.GetNextNode()!=null)
-				{
-					DrawNode(node.GetNextNode(), pos + new Vector2(0, _nodeSize.y + _nodeSpace));
-				}
+				//Y方向の深さを1つ掘る
+				Prepare(node.GetNextNode(), depthX, depthY + 1);
+				return;
 			}
 
-			//分岐ノード
+			//分岐ノードならば
 			else if(node is BranchNode)
 			{
 				var branch = node as BranchNode;
 
-				_drawnNode.Add(new DrawnData(node, nodeRect));
+				//Y方向の深さを1つ掘る
+				Prepare(branch.trueNode, depthX, depthY + 1);
+				//X方向とY方向の深さを1つ掘る
+				Prepare(branch.falseNode, depthX + 1, depthY + 1);
+				return;
+			}
+		}
 
-				if (branch == _targetBasis.currentNode)
+		/// <summary>ノードを描画する</summary>
+		void DrawNodes()
+		{
+			foreach (var item in _prepares)
+			{
+				//位置
+				Vector2 pos = new Vector2(item.depthX * _nodeHorizontalSpace, item.depthY * _nodeVerticalSpace);
+				pos += _globalOffset;
+
+				//矩形
+				Rect nodeRect = new Rect(Vector2.zero, _nodeSize);
+				nodeRect.center = pos;
+
+				if (item.isActive)
 				{
-					var temp = GUI.color;
-					GUI.color = Color.red;
-					GUI.DrawTexture(nodeRect, _branchTex);
-					GUI.color = temp;
+					float progress = _targetBasis.elapsed / item.node.duration;
+					EditorGUI.ProgressBar(nodeRect, progress, "");
 				}
+
+				if (item.isActive)
+					GUI.color = _activeNodeColor;
+				else
+					GUI.color = _nodeColor;
+
+				//処理ノード及びエントリノードの描画
+				if (item.node is ProcessNode || item.node is FlowAIBasis.EntryPointNode)
+				{
+					GUI.DrawTexture(nodeRect, _processTex);
+				}
+				//分岐ノードの描画
+				else if(item.node is BranchNode)
+				{
+					GUI.DrawTexture(nodeRect, _branchTex);
+				}
+
+				GUI.Label(nodeRect, item.node.summary);
+
+				if (item.isActive)
+					GUI.color = Color.white;
+			}
+		}
+
+		void DrawBezier(Vector2 begin, Vector2 end, PrepareData from, PrepareData to,Color color)
+		{
+			//同じノードなら
+			if(from.node==to.node)
+			{
+				Handles.DrawBezier(begin, end,
+						begin + new Vector2(_nodeSize.x, _nodeSize.y * 3f),
+						end + new Vector2(_nodeSize.x, -_nodeSize.y * 3f),
+						color, _lineTex, _lineWidth);
+				return;
+			}
+
+			//始点よりもYが深ければ
+			if (to.depthY > from.depthY)
+			{
+				//Xが同じ深さ
+				if (from.depthX == to.depthX)
+				{
+					Handles.DrawBezier(begin, end,
+						begin - new Vector2(_nodeSize.x, 0f),
+						end + new Vector2(_nodeSize.x, 0f),
+						color, _lineTex, _lineWidth);
+				}
+				//右
+				else if (from.depthX < to.depthY)
+				{
+					Handles.DrawBezier(begin, end,
+						begin + new Vector2(_nodeSize.x, 0f),
+						end,
+						color, _lineTex, _lineWidth);
+				}
+				//左
 				else
 				{
-					GUI.DrawTexture(nodeRect, _branchTex);
+					Handles.DrawBezier(begin, end,
+						begin,
+						end - new Vector2(_nodeSize.x, 0f),
+						color, _lineTex, _lineWidth);
 				}
 
-				GUIStyle style = new GUIStyle();
-				GUIStyleState styleState = new GUIStyleState();
-				style.fontSize = (int)(_nodeSize.y * _nodeSizeScale);
-				styleState.textColor = Color.white;
-				style.normal = styleState;
-
-				GUI.Label(nodeRect, "LID:" + node.localId, style);
-
-				if (branch.trueNode != null)
+			}
+			//始点よりもYが浅ければ
+			else
+			{
+				//Xが同じ深さ
+				if (from.depthX == to.depthX)
 				{
-					DrawNode(branch.trueNode, pos + new Vector2(0, _nodeSize.y+_nodeSpace));
+					Handles.DrawBezier(begin, end,
+						begin - new Vector2(_nodeSize.x, -_nodeSize.y * 3f),
+						end - new Vector2(_nodeSize.x, _nodeSize.y * 3f),
+						color, _lineTex, _lineWidth);
 				}
-
-				if(branch.falseNode!=null)
+				//右
+				else if (from.depthX < to.depthY)
 				{
-					DrawNode(branch.falseNode, pos + new Vector2(_nodeSpace, _nodeSize.y + _nodeSpace));
+					Handles.DrawBezier(begin, end,
+						begin - new Vector2(_nodeSize.x, 0f),
+						end - new Vector2(_nodeSize.x, 0f),
+						color, _lineTex, _lineWidth);
+				}
+				//左
+				else
+				{
+					Handles.DrawBezier(begin, end,
+						begin + new Vector2(_nodeSize.x * 2f, _nodeSize.y * 3f),
+						end + new Vector2(_nodeSize.x, -_nodeSize.y * 3f),
+						color, _lineTex, _lineWidth);
 				}
 			}
 		}
 
 		void DrawLines()
 		{
-			foreach (var drawn in _drawnNode)
+			foreach(var item in _prepares)
 			{
-				if (drawn.node is ProcessNode || drawn.node is FlowAIBasis.EntryPointNode)
+				//位置
+				Vector2 pos = new Vector2(item.depthX * _nodeHorizontalSpace, item.depthY * _nodeVerticalSpace);
+				pos += _globalOffset;
+
+				if (item.node is ProcessNode || item.node is FlowAIBasis.EntryPointNode)
 				{
-					//始点
-					Vector2 begin = drawn.rect.position + new Vector2(drawn.rect.width / 2f, drawn.rect.height);
-					Rect beginRect = new Rect(begin+_beginArrowOffset, new Vector2(10f, 10f));
-					GUI.DrawTexture(beginRect, _arrowHeadTex);
+					var next = _prepares.Find(elem => elem.node == item.node.GetNextNode());
+					var nextPos = new Vector2(next.depthX * _nodeHorizontalSpace, next.depthY * _nodeVerticalSpace);
+					nextPos += _globalOffset;
 
-					//終点
-					Vector2 end = drawn.rect.position + new Vector2(drawn.rect.width / 2f, drawn.rect.height + _nodeSpace);
-					Rect endRect = new Rect(end + _endArrowOffset, new Vector2(10f, 10f));
-					GUI.DrawTexture(endRect, _arrowHeadTex);
+					Vector2 begin = new Vector2(pos.x, pos.y + _nodeSize.y / 2f);
+					Vector2 end = new Vector2(nextPos.x, nextPos.y - _nodeSize.y / 2f);
 
-					//線
-					if (drawn.node == _targetBasis.currentNode)
-					{
-						Rect lineRect = new Rect(begin + _lineOffset, new Vector2(_lineThickness, end.y - begin.y));
-
-						var temp = GUI.color;
-						GUI.color = Color.red;
-						GUI.DrawTexture(lineRect, _lineTex);
-						GUI.color = temp;
-					}
+					if (item.isActive)
+						DrawBezier(begin, end, item, next, _activeLineColor);
 					else
-					{
-						Rect lineRect = new Rect(begin + _lineOffset, new Vector2(_lineThickness, end.y - begin.y));
-						GUI.DrawTexture(lineRect, _lineTex);
-					}
+						DrawBezier(begin, end, item, next, _lineColor);
 				}
-
-				else if(drawn.node is BranchNode)
+				else if(item.node is BranchNode)
 				{
-					var branch = drawn.node as BranchNode;
+					var branch = item.node as BranchNode;
 
-					//始点
-					Vector2 trueBegin = drawn.rect.position + new Vector2(drawn.rect.width / 2f, drawn.rect.height);
-					Rect trueBeginRect = new Rect(trueBegin + _beginArrowOffset, new Vector2(10f, 10f));
-					GUI.DrawTexture(trueBeginRect, _arrowHeadTex);
-
-					//終点
-					Vector2 trueEnd = drawn.rect.position + new Vector2(drawn.rect.width / 2f, drawn.rect.height + _nodeSpace);
-					Rect trueEndRect = new Rect(trueEnd + _endArrowOffset, new Vector2(10f, 10f));
-					GUI.DrawTexture(trueEndRect, _arrowHeadTex);
-
-					//線
-					if (branch == _targetBasis.currentNode && branch.GetNextNode() == branch.trueNode)
 					{
-						Rect lineRect = new Rect(trueBegin + _lineOffset, new Vector2(_lineThickness, trueEnd.y - trueBegin.y));
+						var trueNext = _prepares.Find(elem => elem.node == branch.trueNode);
+						var trueNextPos = new Vector2(trueNext.depthX * _nodeHorizontalSpace, trueNext.depthY * _nodeVerticalSpace);
+						trueNextPos += _globalOffset;
 
-						var temp = GUI.color;
-						GUI.color = Color.red;
-						GUI.DrawTexture(lineRect, _lineTex);
-						GUI.color = temp;
+						Vector2 begin = new Vector2(pos.x, pos.y + _nodeSize.y / 2f);
+						Vector2 end = new Vector2(trueNextPos.x, trueNextPos.y - _nodeSize.y / 2f);
+
+						if (item.isActive && branch.GetNextNode() == branch.trueNode)
+							DrawBezier(begin, end, item, trueNext, _activeLineColor);
+						else
+							DrawBezier(begin, end, item, trueNext, _lineColor);
 					}
-					else
 					{
-						Rect lineRect = new Rect(trueBegin + _lineOffset, new Vector2(_lineThickness, trueEnd.y - trueBegin.y));
-						GUI.DrawTexture(lineRect, _lineTex);
-					}
+						var falseNext = _prepares.Find(elem => elem.node == branch.falseNode);
+						var falseNextPos = new Vector2(falseNext.depthX * _nodeHorizontalSpace, falseNext.depthY * _nodeVerticalSpace);
+						falseNextPos += _globalOffset;
 
-					//分岐始点
-					Vector2 falseBegin = drawn.rect.position + new Vector2(drawn.rect.width, drawn.rect.height / 2f);
-					Rect falseBeginRect = new Rect(falseBegin + _branchBeginArrowOffset, new Vector2(10f, 10f));
+						Vector2 begin = new Vector2(pos.x + _nodeSize.x / 2f, pos.y);
+						Vector2 end = new Vector2(falseNextPos.x, falseNextPos.y - _nodeSize.y / 2f);
 
-					GUIUtility.RotateAroundPivot(-90f, falseBegin);
-					GUI.DrawTexture(falseBeginRect, _arrowHeadTex);
-					GUI.matrix = Matrix4x4.identity;
-
-					//分岐終点
-					var falseNodeDrawnData = _drawnNode.Find(item => item.node == branch.falseNode);
-
-					Vector2 falseEnd = falseNodeDrawnData.rect.position + new Vector2(_nodeSize.x / 2f, -_nodeSpace / 2f);
-					Rect falseEndRect = new Rect(falseEnd + _branchEndArrowOffset, new Vector2(10f, 10f));
-
-					GUIUtility.RotateAroundPivot(90f, falseEnd);
-					GUI.DrawTexture(falseEndRect, _arrowHeadTex);
-					GUI.matrix = Matrix4x4.identity;
-
-					//分岐線
-					if (branch == _targetBasis.currentNode && branch.GetNextNode() == branch.falseNode)
-					{
-					}
-					else
-					{
-
+						if (item.isActive && branch.GetNextNode() == branch.falseNode)
+							DrawBezier(begin, end, item, falseNext, _activeLineColor);
+						else
+							DrawBezier(begin, end, item, falseNext, _lineColor);
 					}
 				}
 			}
+
 		}
 
-		private void OnGUI()
+		void Start()
 		{
-			GUI.Box(new Rect(new Vector2(5f, 5f), new Vector2(1000, 1000)), "");
+			_targetBasis = _target.GetComponent<FlowAIHolder>().flowAI;	
+		}
 
-			_drawnNode.Clear();
-			DrawNode(_targetBasis.entryPointNode, new Vector2(10f, 10f));
-
+		void OnGUI()
+		{
+			GUI.Box(new Rect(_globalOffset- new Vector2(100f,100f), new Vector2(1000, 800)), "");
+			Prepare(_targetBasis.entryPointNode);
+			DrawNodes();
 			DrawLines();
-			
-			Handles.DrawLine(Vector3.zero, new Vector3(100f, 100f));
 		}
 	}
 }

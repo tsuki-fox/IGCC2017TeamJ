@@ -23,10 +23,10 @@ public class EnemyControl : MonoBehaviour
 	}
 
 	// Use this for initialization
-	void Awake ()
+	void Start ()
 	{
 		//FlowAI生成 Create FlowAI.
-		_flowAI = new FlowAIBasis();
+		_flowAI = GetComponent<FlowAIHolder>().flowAI;
 
 		//ノード生成 Create nodes.
 		var rotNode = new ProcessNode();
