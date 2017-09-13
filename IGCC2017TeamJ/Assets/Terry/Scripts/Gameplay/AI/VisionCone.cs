@@ -10,9 +10,9 @@ public class VisionCone {
     private List<string> obstacleTags;
 
     [SerializeField, Range(0.0f, 180.0f)]
-    private float viewAngle = 45.0f;
+    private float viewAngle = 45.0f; //角度
     [SerializeField, Range(0, 9999999)]
-    private float viewDistance = 5.0f;
+    private float viewDistance = 5.0f; //距離
 
     [SerializeField, Range(6, 999999)]
     private int numSlices = 12; // For the sides of the cone.
@@ -163,7 +163,7 @@ public class VisionCone {
             return false;
         }
 
-        // Distance check
+        // Distance Check 距離
         Vector3 targetDirection = target.transform.position - source.transform.position;
         if (targetDirection.sqrMagnitude > viewDistance * viewDistance) {
             Debug.Log("VisionCone::IsTargetInVisionCone - Target is too far!");
@@ -172,7 +172,7 @@ public class VisionCone {
             //Debug.Log(targetDirection.magnitude);
         }
 
-        // Angle Check
+        // Angle Check 角度
         targetDirection.Normalize();
         float dotProduct = Vector3.Dot(source.transform.forward, targetDirection);
         float angleTotarget = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
@@ -183,8 +183,6 @@ public class VisionCone {
             Debug.Log("VisionCone::IsTargetInVisionCone - Direction To Target is " + targetDirection);
             Debug.Log("VisionCone::IsTargetInVisionCone - Source's Forward Vector is " + source.transform.forward);
             return false;
-        } else {
-            Debug.Log(dotProduct);
         }
 
         // Check that there is nothing blocking the view.
