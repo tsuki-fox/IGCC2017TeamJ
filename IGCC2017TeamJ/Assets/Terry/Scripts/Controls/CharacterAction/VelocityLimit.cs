@@ -14,6 +14,10 @@ public class VelocityLimit : MonoBehaviour {
     [SerializeField]
     private bool includeZAxis = true;
 
+    public void SetMaxVelocity(float _maxVelocity) {
+        maxVelocity = _maxVelocity;
+    }
+
     public float GetMaxVelocity() {
         return maxVelocity;
     }

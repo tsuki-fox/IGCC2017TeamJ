@@ -7,7 +7,8 @@ using System.Linq;
 
 namespace FlowAI
 {
-	public class FlowAIBasis
+    [System.Serializable]
+    public class FlowAIBasis
 	{
 		#region inner class
 		/// <summary>FlowAIのエントリポイント用ノード</summary>
@@ -40,6 +41,7 @@ namespace FlowAI
 
 		#region private fields
 		int _idCount;   //ID生成用カウンタ
+        [SerializeField]
 		List<FlowAINode> _nodes;    //ノードリスト
 		EntryPointNode _entryPoint; //エントリポイント
 		FlowAINode _currentNode;    //現在のノード
