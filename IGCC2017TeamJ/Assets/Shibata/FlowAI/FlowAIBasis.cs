@@ -41,7 +41,7 @@ namespace FlowAI
 		#region private fields
 		int _idCount;   //ID生成用カウンタ
 		List<FlowAINode> _nodes;    //ノードリスト
-		EntryPointNode _entryPoint;	//エントリポイント
+		EntryPointNode _entryPoint; //エントリポイント
 		FlowAINode _currentNode;    //現在のノード
 
 		float _elapsed;
@@ -97,6 +97,7 @@ namespace FlowAI
 		/// </summary>
 		public void Entry()
 		{
+			_elapsed = 0f;
 			Transition(0);
 		}
 
@@ -110,7 +111,7 @@ namespace FlowAI
 			//停止中だった場合
 			if (_isStopped)
 			{
-			//	Debug.Log("[UPDT]FlowAIは停止しています");
+				//	Debug.Log("[UPDT]FlowAIは停止しています");
 				return;
 			}
 
@@ -125,7 +126,7 @@ namespace FlowAI
 			//遷移中の場合
 			else
 			{
-			//	Debug.LogFormat("[UPDT]遷移中 LID{0} >>> LID{1}", _currentNode.localId, _currentNode.GetNextNode().localId);
+				//	Debug.LogFormat("[UPDT]遷移中 LID{0} >>> LID{1}", _currentNode.localId, _currentNode.GetNextNode().localId);
 			}
 		}
 
@@ -167,35 +168,110 @@ namespace FlowAI
 		/// <param name="args">ノード node.</param>
 		public void AddNode(params FlowAINode[] args)
 		{
-			foreach(var item in args)
+			foreach (var item in args)
 			{
 				AddNode(item);
 			}
 		}
 
 		/// <summary>ノードを交換する. Swap nodes.</summary>
-		/// <param name="from"></param>
-		/// <param name="to"></param>
-		public void Swap(int from,int to)
+		/// <param name="fromId"></param>
+		/// <param name="toId"></param>
+		public void Swap(int fromId, int toId)
 		{
-			var node1 = _nodes.Find(item => item.localId == from);
-			var node2 = _nodes.Find(item => item.localId == to);
+			var temp1 = _nodes.Find(item => item.localId == fromId);
+			var temp2 = _nodes.Find(item => item.localId == toId);
 
-			var node1ProcPrevs = _nodes
-				.Select(item => item as ProcessNode)
-				.Where(item => item.nextNode == node1);
+			var from = temp1 as ProcessNode;
+			var to = temp2 as ProcessNode;
 
-			var node1BranchPrevs = _nodes
-				.Select(item => item as BranchNode)
-				.Where(item => item.trueNode == node1 || item.falseNode == node1);
 
-			foreach(var prev in node1ProcPrevs)
-				prev.nextNode = node1;
-			foreach(var prev in node1BranchPrevs)
+			//エラー処理
+			bool isFailed = false;
+			//fromが不明
+			if (temp1 == null)
 			{
-
+				TFDebug.Log("FlowAIBasis", "fromノードが見つかりません");
+				isFailed = true;
+			}
+			//toが不明
+			if (temp2 == null)
+			{
+				TFDebug.Log("FlowAIBasis", "toノードが見つかりません");
+				isFailed = true;
+			}
+			//交換するノードが処理ノードではない
+			if (from == null || to == null)
+			{
+				TFDebug.Log("FlowAIBasis", "処理ノード以外をSwapすることはできません");
+				isFailed = true;
+			}
+			//交換失敗
+			if (isFailed)
+			{
+				TFDebug.Log("FlowAIBasis", "Swapに失敗しました");
+				return;
 			}
 			
+			//遷移先のノードを交換
+			{
+				var temp = from.nextNode;
+				from.nextNode = to.nextNode;
+				to.nextNode = temp;
+			}
+			//遷移元のノードを交換(処理ノード)
+			{
+				var fromPrevs = _nodes
+					.OfType<ProcessNode>()
+					.Where(item => item.nextNode == from);
+
+				var toPrevs = _nodes
+					.OfType<ProcessNode>()
+					.Where(item => item.nextNode == to);
+
+				TFDebug.Log("FlowAIBasis", "from prevs count:{0}", fromPrevs.Count());
+				TFDebug.Log("FlowAIBasis", "to prevs count:{0}", toPrevs.Count());
+
+				foreach(var prev in fromPrevs)
+					prev.nextNode = to;
+				foreach (var prev in toPrevs)
+					prev.nextNode = from;
+			}
+			//遷移元のノードを交換(分岐ノード)
+			{
+				var fromPrevs = _nodes
+					.OfType<BranchNode>()
+					.Where(item => item.trueNode == from || item.falseNode == from);
+
+				var toPrevs = _nodes
+					.OfType<BranchNode>()
+					.Where(item => item.trueNode == to || item.falseNode == to);
+
+				foreach(var prev in fromPrevs)
+				{
+					if (prev.trueNode == from)
+						prev.trueNode = to;
+					else
+						prev.falseNode = to;
+				}
+				foreach(var prev in toPrevs)
+				{
+					if (prev.trueNode == to)
+						prev.trueNode = from;
+					else
+						prev.falseNode = from;
+				}
+			}
+			//遷移元のノードを交換(エントリノード)
+			{
+				if (entryPointNode.nextNode == from)
+					entryPointNode.nextNode = to;
+				else if (entryPointNode.nextNode == to)
+					entryPointNode.nextNode = from;
+			}
+
+			TFDebug.Log("FlowAIBasis", "Swapping finished! from LID:{0} to LID:{1}", from.localId, to.localId);
+
 		}
 		#endregion
 	}

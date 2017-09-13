@@ -45,6 +45,10 @@ namespace FlowAI
 		Color _activeNodeColor = Color.red;
 
 		[SerializeField]
+		Vector2 _windowPosition;    //ウィンドウの位置
+		[SerializeField]
+		Vector2 _windowSize;		//ウィンドウのサイズ
+		[SerializeField]
 		Vector2 _globalOffset;		//全体のオフセット
 
 		[SerializeField]
@@ -62,8 +66,14 @@ namespace FlowAI
 		Color _activeLineColor = Color.red;     //アクティブ時の線の色
 
 		List<PrepareData> _prepares = new List<PrepareData>();  //準備済みリスト
-		PrepareData _from;
-		PrepareData _to;
+
+		[SerializeField]
+		bool _isVisible = true;	//表示フラグ
+		#endregion
+
+		#region properties
+		public FlowAIHolder target { get { return _target; } set { _target = value; } }
+		public bool isVisible { get { return _isVisible; } set { _isVisible = value; } }
 		#endregion
 
 		void Prepare(FlowAINode node)
@@ -274,12 +284,36 @@ namespace FlowAI
 
 		void Start()
 		{
-			_targetBasis = _target.GetComponent<FlowAIHolder>().flowAI;	
+			if (_target != null)
+				_targetBasis = _target.GetComponent<FlowAIHolder>().flowAI;
+		}
+
+		void OnValidate()
+		{
+			if (_target != null)
+				_targetBasis = _target.GetComponent<FlowAIHolder>().flowAI;
+			else
+				_targetBasis = null;
 		}
 
 		void OnGUI()
 		{
-			GUI.Box(new Rect(_globalOffset- new Vector2(100f,100f), new Vector2(1000, 800)), "");
+			//非表示
+			if (!_isVisible)
+				return;
+
+			GUI.Box(new Rect(_windowPosition, _windowSize), "");
+
+			//ターゲットにするAIがnull
+			if (_targetBasis == null)
+			{
+				var temp = GUI.color;
+				GUI.color = Color.red;
+				GUI.Label(new Rect(_windowPosition + _globalOffset, new Vector2(100f, 100f)), "Target AI not found");
+				GUI.color = temp;
+				return;
+			}
+
 			Prepare(_targetBasis.entryPointNode);
 			DrawNodes();
 			DrawLines();
