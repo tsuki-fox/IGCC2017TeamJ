@@ -14,9 +14,9 @@ public class VisionCone {
     [SerializeField, Range(0, 9999999)]
     private float viewDistance = 5.0f;
 
-    [SerializeField, Range(3, 999999)]
+    [SerializeField, Range(6, 999999)]
     private int numSlices = 12; // For the sides of the cone.
-    [SerializeField, Range(1, 999999)]
+    [SerializeField, Range(3, 999999)]
     private int numDivisions = 4; // For the base of the cone.
     [SerializeField]
     private Material coneMaterial = null;
@@ -91,7 +91,7 @@ public class VisionCone {
     }
 
     public void SetNumSlices(int _numSlices, bool _createVisionConeMesh = false) {
-        numSlices = Mathf.Max(3, _numSlices);
+        numSlices = Mathf.Max(6, _numSlices);
 
         if (_createVisionConeMesh) {
             CreateVisionConeMesh();
@@ -103,7 +103,7 @@ public class VisionCone {
     }
 
     public void SetNumDivisions(int _numDivision, bool _createVisionConeMesh = false) {
-        numDivisions = Mathf.Max(1, _numDivision);
+        numDivisions = Mathf.Max(3, _numDivision);
 
         if (_createVisionConeMesh) {
             CreateVisionConeMesh();
