@@ -172,9 +172,7 @@ public class EnemyControl_Patrol : MonoBehaviour
         canSeePlayerNode.Initialize(alertNode, 0.0f, checkReachedWaypointNode, 0.0f, CanSeePlayer);
         alertNode.Initialize(0.0f, playerInAttackRangeNode, AlertNodeFunction);
         checkReachedWaypointNode.Initialize(patrolReachedNode, 0.0f, patrolMoveNode, 0.0f, CheckReachedWaypoint);
-
-        explodeNode.Initialize(0.0f, null, ExplodeNodeFunction);
-        shootNode.Initialize(1.0f, playerInAttackRangeNode, ShootNodeFunction);
+        
         chaseNode.Initialize(0.0f, checkPlayerEscapedNode, ChaseNodeFunction);
         checkPlayerEscapedNode.Initialize(canSeePlayerNode, 0.0f, playerInAttackRangeNode, 0.0f, CheckPlayerEscaped);
 
@@ -183,17 +181,21 @@ public class EnemyControl_Patrol : MonoBehaviour
 
         switch (attackType) {
             case AttackType.AttackType_Explode:
+                explodeNode.Initialize(0.0f, null, ExplodeNodeFunction);
                 playerInAttackRangeNode.Initialize(explodeNode, 0.0f, chaseNode, 0.0f, PlayerInAttackRange);
+                flowAI.AddNode(explodeNode);
                 break;
             case AttackType.AttackType_Shoot:
+                shootNode.Initialize(1.0f, playerInAttackRangeNode, ShootNodeFunction);
                 playerInAttackRangeNode.Initialize(shootNode, 0.0f, chaseNode, 0.0f, PlayerInAttackRange);
+                flowAI.AddNode(shootNode);
                 break;
             default:
                 break;
         }
         
 
-        flowAI.AddNode(alertNode, patrolMoveNode, patrolReachedNode, chaseNode, explodeNode, canSeePlayerNode, playerInAttackRangeNode, checkReachedWaypointNode, checkPlayerEscapedNode, shootNode);
+        flowAI.AddNode(alertNode, patrolMoveNode, patrolReachedNode, chaseNode, canSeePlayerNode, playerInAttackRangeNode, checkReachedWaypointNode, checkPlayerEscapedNode);
 
         //エントリポイントの次のノードを設定 Setting next node for entry point node.
         flowAI.entryPointNode.nextNode = canSeePlayerNode;
