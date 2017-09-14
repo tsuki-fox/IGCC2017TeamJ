@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
+//using UnityEngine.UI;
 using UnityEngine;
 
 public class SetHp : MonoBehaviour
@@ -13,7 +13,7 @@ public class SetHp : MonoBehaviour
     private int count;
 
     // UISlider
-    private Slider hpSlider;
+    //private Slider hpSlider;
     
     // 体力のマックス値
     private int maxHp;
@@ -23,9 +23,9 @@ public class SetHp : MonoBehaviour
     void Start()
     {
         //eStatus = transform.root.GetComponent(EnemyStatus);
-        hpSlider = GetComponent<Slider>();
+        //hpSlider = GetComponent<Slider>();
         //maxHp = eStatus.GetMaxHp();
-        hpSlider.value = hpSlider.maxValue;
+        //hpSlider.value = hpSlider.maxValue;
         count = maxHp;
 
 
