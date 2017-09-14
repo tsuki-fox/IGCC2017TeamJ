@@ -138,7 +138,7 @@ public class EnemyControl_Patrol : MonoBehaviour
             return;
         }
 
-        Debug.Log("PlayerSpottedEvent");
+        //Debug.Log("PlayerSpottedEvent");
         lastKnownPlayerPosition = _playerPosition;
 
         // We already see the player.
@@ -168,25 +168,25 @@ public class EnemyControl_Patrol : MonoBehaviour
         BranchNode checkReachedWaypointNode = new BranchNode();
         BranchNode checkPlayerEscapedNode = new BranchNode();
 
-        canSeePlayerNode.Initialize(alertNode, 0.0f, checkReachedWaypointNode, 0.0f, CanSeePlayer);
-        alertNode.Initialize(0.0f, playerInAttackRangeNode, AlertNodeFunction);
-        checkReachedWaypointNode.Initialize(patrolReachedNode, 0.0f, patrolMoveNode, 0.0f, CheckReachedWaypoint);
+        canSeePlayerNode.Initialize(alertNode, 0.0f, checkReachedWaypointNode, 0.0f, CanSeePlayer, "Can See Player?");
+        alertNode.Initialize(0.0f, playerInAttackRangeNode, AlertNodeFunction, "Alert Others");
+        checkReachedWaypointNode.Initialize(patrolReachedNode, 0.0f, patrolMoveNode, 0.0f, CheckReachedWaypoint, "Reached Waypoint?");
         
-        chaseNode.Initialize(0.0f, checkPlayerEscapedNode, ChaseNodeFunction);
-        checkPlayerEscapedNode.Initialize(canSeePlayerNode, 0.0f, playerInAttackRangeNode, 0.0f, CheckPlayerEscaped);
+        chaseNode.Initialize(0.0f, checkPlayerEscapedNode, ChaseNodeFunction, "Chase Target");
+        checkPlayerEscapedNode.Initialize(canSeePlayerNode, 0.0f, playerInAttackRangeNode, 0.0f, CheckPlayerEscaped, "Has Target Escaped?");
 
-        patrolMoveNode.Initialize(0.0f, canSeePlayerNode, PatrolMoveNodeFunction);
-        patrolReachedNode.Initialize(0.0f, canSeePlayerNode, PatrolReachedNodeFunction);
+        patrolMoveNode.Initialize(0.0f, canSeePlayerNode, PatrolMoveNodeFunction, "Patrol Move");
+        patrolReachedNode.Initialize(0.0f, canSeePlayerNode, PatrolReachedNodeFunction, "Patrol Reached Waypoint");
 
         switch (attackType) {
             case AttackType.AttackType_Explode:
-                explodeNode.Initialize(0.0f, null, ExplodeNodeFunction);
-                playerInAttackRangeNode.Initialize(explodeNode, 0.0f, chaseNode, 0.0f, PlayerInAttackRange);
+                explodeNode.Initialize(0.0f, null, ExplodeNodeFunction, "Explosion!");
+                playerInAttackRangeNode.Initialize(explodeNode, 0.0f, chaseNode, 0.0f, PlayerInAttackRange, "Is Target In Explosion Range?");
                 flowAI.AddNode(explodeNode);
                 break;
             case AttackType.AttackType_Shoot:
-                shootNode.Initialize(1.0f, playerInAttackRangeNode, ShootNodeFunction);
-                playerInAttackRangeNode.Initialize(shootNode, 0.0f, chaseNode, 0.0f, PlayerInAttackRange);
+                shootNode.Initialize(1.0f, playerInAttackRangeNode, ShootNodeFunction, "Shoot!");
+                playerInAttackRangeNode.Initialize(shootNode, 0.0f, chaseNode, 0.0f, PlayerInAttackRange, "Is Target In Shooting Range?");
                 flowAI.AddNode(shootNode);
                 break;
             default:
@@ -225,7 +225,7 @@ public class EnemyControl_Patrol : MonoBehaviour
 
         //Check if we know who the player is.
         if (player == null) {
-            Debug.Log("EnemyControl_Patrol::Update - No Player!");
+            //Debug.Log("EnemyControl_Patrol::Update - No Player!");
             GameplayChannel.GetInstance().SendRequestPlayerEvent(); //主人公は誰ですか。
             return; // Skip this frame.
         }
@@ -286,7 +286,7 @@ public class EnemyControl_Patrol : MonoBehaviour
 
     // 巡回
     void Patrol() {
-        Debug.Log("Patrol");
+        //Debug.Log("Patrol");
 
         visionCone.SetViewAngle(patrolViewAngle);
         visionCone.SetViewDistance(patrolViewDistance, true);
@@ -315,7 +315,7 @@ public class EnemyControl_Patrol : MonoBehaviour
         if (canSeePlayer) {
             chaseGiveUpTimer = chaseGiveUpDuration;
         } else if ((chaseGiveUpTimer -= Time.deltaTime) < 0.0f) {
-            Debug.Log("Gave up chase!");
+            //Debug.Log("Gave up chase!");
             return;
         }
 
@@ -329,7 +329,7 @@ public class EnemyControl_Patrol : MonoBehaviour
        並ぶ者なき崩壊なり。万象等しく灰塵に帰し、深淵より来たれ！
        これが人類最大の威力の攻撃手段、これこそが究極の攻撃魔法、エクスプロージョン！」*/
     void エクスプロージョン() {
-        Debug.Log("エクスプロージョン");
+        //Debug.Log("エクスプロージョン");
         // Create an explosion.
         GameObject explosion = GameObject.Instantiate(explosionObject);
         explosion.transform.position = gameObject.transform.position;
@@ -402,7 +402,7 @@ public class EnemyControl_Patrol : MonoBehaviour
     }
 
     // Branch Node Predicated
-    bool CanSeePlayer() {
+    public bool CanSeePlayer() {
         Assert.AreNotEqual(player, null);
 
         bool result = visionCone.IsTargetInVisionCone(gameObject, player);
@@ -423,7 +423,7 @@ public class EnemyControl_Patrol : MonoBehaviour
     }
 
     bool PlayerInAttackRange() {
-        Debug.Log("PlayerInAttackRange");
+        //Debug.Log("PlayerInAttackRange");
         Assert.AreNotEqual(player, null);
 
         if (CanSeePlayer()) {
@@ -434,7 +434,7 @@ public class EnemyControl_Patrol : MonoBehaviour
     }
 
     bool CheckReachedWaypoint() {
-        Debug.Log("CheckReachedWaypoint");
+        //Debug.Log("CheckReachedWaypoint");
         if (waypoints.Count == 0) {
             return true;
         }
@@ -453,46 +453,46 @@ public class EnemyControl_Patrol : MonoBehaviour
     }
     
     bool CheckPlayerEscaped() {
-        Debug.Log("CheckPlayerEscaped");
+        //Debug.Log("CheckPlayerEscaped");
         return chaseGiveUpTimer <= 0.0f && !CanSeePlayer();
     }
 
     // アラート
     // Process Node Functions
     void AlertNodeFunction() {
-        Debug.Log("AlertNodeFunction");
+        //Debug.Log("AlertNodeFunction");
         currentState = AIState.AIState_None;
         GameplayChannel.GetInstance().SendPlayerSpottedEvent(lastKnownPlayerPosition);
     }
 
     // 巡回
     void PatrolMoveNodeFunction() {
-        Debug.Log("PatrolMoveNodeFunction");
+        //Debug.Log("PatrolMoveNodeFunction");
         // Doot dii doot dii doo, just strolling along..
         currentState = AIState.AIState_Patrol;
     }
 
     // 巡回
     void PatrolReachedNodeFunction() {
-        Debug.Log("PatrolReachedNodeFunction");
+        //Debug.Log("PatrolReachedNodeFunction");
         IncreaseWaypointIndex();
     }
 
     // 追
     void ChaseNodeFunction() {
-        Debug.Log("ChaseNodeFunction");
+        //Debug.Log("ChaseNodeFunction");
         currentState = AIState.AIState_Chase;
     }
 
     // 爆
     void ExplodeNodeFunction() {
-        Debug.Log("ExplodeNodeFunction");
+        //Debug.Log("ExplodeNodeFunction");
         currentState = AIState.AIState_Explode;
     }
 
     // 射
     void ShootNodeFunction() {
-        Debug.Log("ShootNodeFunction");
+        //Debug.Log("ShootNodeFunction");
         visionCone.SetViewAngle(combatViewAngle);
         visionCone.SetViewDistance(combatViewDistance, true);
         currentState = AIState.AIState_Shoot;
