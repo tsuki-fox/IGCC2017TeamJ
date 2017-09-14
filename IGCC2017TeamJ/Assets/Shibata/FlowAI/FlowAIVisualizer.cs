@@ -95,10 +95,23 @@ namespace FlowAI
 
 		FlowAINode _from = null;
 		FlowAINode _to = null;
-		bool _isInSwap = false;
+		bool _isInDrag = false;
 
 		int _maxDepthX;
 		int _maxDepthY;
+
+		[SerializeField]
+		float _swappingDuration = 0.5f;
+
+		bool _isInSwapping = false;
+		int _swappingFromId = -1;
+		int _swappingToId = -1;
+		float _swappingElapsed = 0f;
+
+		bool _isInHacking = false;
+		float _showDuration;
+		float _showElapsed = 0f;
+
 		#endregion
 
 		#region properties
@@ -161,6 +174,10 @@ namespace FlowAI
 		{
 			foreach (var item in _prepares)
 			{
+				//スワップ中ならスキップする
+				if (item.node.localId == _swappingFromId || item.node.localId == _swappingToId)
+					continue;
+
 				//位置
 				Vector2 pos = new Vector2(item.depthX * _nodeHorizontalSpace, item.depthY * _nodeVerticalSpace);
 				pos += _globalOffset;
@@ -192,7 +209,11 @@ namespace FlowAI
 					progRect.position = new Vector2(progRect.position.x, progRect.position.y - _fontSize * 1.1f);
 
 					float progress = _targetBasis.elapsed / item.node.duration;
-					GUI.Label(progRect, string.Format("progress {0:0.00}...", progress * 100f), progStyle);
+					string bar = "";
+					for (int f1 = 0; f1 < (int)(progress * 20f); f1++)
+						bar += "|";
+
+					GUI.Label(progRect, "progress:" + bar, progStyle);
 
 					GUI.DrawTexture(nodeRect, usedTex, ScaleMode.ScaleToFit, true, aspect, _activeNodeColor, 0f, 0f);
 				}
@@ -207,6 +228,15 @@ namespace FlowAI
 				style.normal = state;
 
 				GUI.Label(nodeRect, item.node.summary, style);
+			}
+
+			//スワップアニメーション
+			if (_isInSwapping)
+			{
+				var swpFrom = _prepares.Find(item => item.node.localId == _swappingFromId);
+				var swpTo = _prepares.Find(item => item.node.localId == _swappingToId);
+
+				float t = _swappingElapsed / _swappingDuration;
 			}
 		}
 
@@ -384,6 +414,27 @@ namespace FlowAI
 				_targetBasis = _target.GetComponent<FlowAIHolder>().flowAI;
 		}
 
+		void Update()
+		{
+			if(_isInSwapping)
+			{
+				_swappingElapsed += Time.deltaTime;
+				if(_swappingElapsed>_swappingDuration)
+				{
+					_isInSwapping = false;
+					_swappingFromId = -1;
+					_swappingToId = -1;
+				}
+			}
+
+			if(!_isInHacking)
+			{
+				_showElapsed += Time.deltaTime;
+				if (_showElapsed > _showDuration)
+					_isVisible = false;
+			}
+		}
+
 		void OnValidate()
 		{
 			if (_target != null)
@@ -394,6 +445,24 @@ namespace FlowAI
 
 		void OnGUI()
 		{
+			if (!_isInHacking)
+			{
+				if (GUI.Button(new Rect(0, 0, 100, 33), "hack begin"))
+				{
+					BeginHacking();
+				}
+			}
+			else
+			{
+				if (GUI.Button(new Rect(0, 0, 100, 33), "hack end"))
+				{
+					EndHacking(5f);
+				}
+			}
+
+			TFDebug.ClearMonitor("visualizer");
+			TFDebug.Write("visualizer", "show time:{0}\n", _showElapsed);
+
 			//非表示
 			if (!_isVisible)
 				return;
@@ -411,38 +480,64 @@ namespace FlowAI
 			}
 
 			Prepare(_targetBasis.entryPointNode);
-			DrawNodes();
 			DrawLines();
+			DrawNodes();
 			DrawFocus();
-			RevertButton(new Rect(_windowPosition + new Vector2(10f, 10f), new Vector2(100f, 33f)));
+			RevertButton(new Rect(_windowPosition + new Vector2(10f, 10f), new Vector2(100f, 33f)));			
 
-			PrepareData? focused = _prepares
-				.Select(item => item as PrepareData?)
-				.FirstOrDefault(item => item.Value.isFocus);
-
-			if (Input.GetMouseButtonDown(0) && focused.HasValue && focused.Value.node is ProcessNode)
+			if (_isInHacking)
 			{
-				_isInSwap = true;
-				_from = focused.Value.node;
-			}
+				PrepareData? focused = _prepares
+					.Select(item => item as PrepareData?)
+					.FirstOrDefault(item => item.Value.isFocus);
 
-			if (Input.GetMouseButtonUp(0) && _isInSwap && focused.HasValue && focused.Value.node is ProcessNode)
-			{
-				_isInSwap = false;
-				_to = focused.Value.node;
-				_targetBasis.ImitativeSwap(_from.localId, _to.localId);
-			}
-			else if (Input.GetMouseButtonUp(0) && _isInSwap)
-			{
-				_isInSwap = false;
-				_from = null;
-			}
+				if (Input.GetMouseButtonDown(0) && focused.HasValue && focused.Value.node is ProcessNode)
+				{
+					_isInDrag = true;
+					_from = focused.Value.node;
+				}
 
-			if (_isInSwap)
-				OnSwap();
+				if (Input.GetMouseButtonUp(0) && _isInDrag && focused.HasValue && focused.Value.node is ProcessNode)
+				{
+					_isInDrag = false;
+					_to = focused.Value.node;
 
-			TFDebug.ClearMonitor("visualizer");
-			TFDebug.Write("visualizer", "is in swap:{0}\n", _isInSwap.ToString());
+					if (!_isInSwapping)
+					{
+						_targetBasis.ImitativeSwap(_from.localId, _to.localId);
+
+						_isInSwapping = true;
+						_swappingElapsed = 0f;
+						_swappingFromId = _from.localId;
+						_swappingToId = _to.localId;
+					}
+				}
+				else if (Input.GetMouseButtonUp(0) && _isInDrag)
+				{
+					_isInDrag = false;
+					_from = null;
+				}
+
+				if (_isInDrag)
+					OnSwap();
+
+				TFDebug.ClearMonitor("visualizer");
+				TFDebug.Write("visualizer", "is in swap:{0}\n", _isInDrag.ToString());
+			}
 		}
+
+		#region public methods
+		public void BeginHacking()
+		{
+			_isInHacking = true;
+			_isVisible = true;
+		}
+		public void EndHacking(float duration)
+		{
+			_isInHacking = false;
+			_showElapsed = 0f;
+			_showDuration = duration;
+		}
+		#endregion
 	}
 }

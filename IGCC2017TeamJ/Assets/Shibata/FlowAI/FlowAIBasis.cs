@@ -63,6 +63,10 @@ namespace FlowAI
 		/// </summary>
 		public FlowAINode currentNode { get { return _currentNode; } }
 
+		/// <summary>AIの動作を停止させるか is AI stopped?</summary>
+		public bool isStopped { get { return _isStopped; }set { _isStopped = value; } }
+
+		/// <summary>elapsed time.</summary>
 		public float elapsed { get { return _elapsed; } }
 		#endregion
 

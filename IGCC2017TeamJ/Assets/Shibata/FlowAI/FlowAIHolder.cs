@@ -5,7 +5,7 @@ using FlowAI;
 
 public class FlowAIHolder : MonoBehaviour
 {
-    [SerializeField]
+	[SerializeField]
 	FlowAIBasis _flowAI;
 
 	public FlowAIBasis flowAI

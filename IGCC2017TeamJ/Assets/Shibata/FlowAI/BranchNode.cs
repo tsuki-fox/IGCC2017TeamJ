@@ -50,6 +50,26 @@ namespace FlowAI
 
 			predicate += pred;
 		}
+
+		/// <summary>初期化 Initialize.</summary>
+		/// <param name="trueNode">結果が真の場合の遷移先ノード Next node.In case of true.</param>
+		/// <param name="trueDuration">結果が真の場合の遷移時間 Transition duration.In case of true.</param>
+		/// <param name="falseNode">結果が偽の場合の遷移先ノード Next node.In case of false.</param>
+		/// <param name="falseDuration">結果が偽の場合の遷移先ノード Transition duration.In case of false.</param>
+		/// <param name="pred">叙述関数 Predicate function.</param>
+		/// <param name="summary">node's summary</param>
+		public void Initialize(FlowAINode trueNode, float trueDuration, FlowAINode falseNode, float falseDuration, Predicate pred, string summary)
+		{
+			_trueNode = trueNode;
+			_trueDuration = trueDuration;
+
+			_falseNode = falseNode;
+			_falseDuration = falseDuration;
+
+			_summary = summary;
+
+			predicate += pred;
+		}
 		#endregion
 
 		#region overrides
