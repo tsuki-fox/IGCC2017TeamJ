@@ -548,7 +548,7 @@ Prefab:
         type: 2}
       propertyPath: _target
       value: 
-      objectReference: {fileID: 244438920}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0769ddfab3e3bb0448b080e634c92104, type: 2}
   m_IsPrefabParent: 0
@@ -724,7 +724,7 @@ GameObject:
   - component: {fileID: 1938240895}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

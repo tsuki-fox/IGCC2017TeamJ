@@ -146,7 +146,7 @@ namespace FlowAI
 			//そのIDのノードが存在しない場合
 			if (node == null)
 			{
-				Debug.LogFormat("[TRNS]この基盤に存在しないローカルID:{0}", localId);
+				TFDebug.Log("FlowAIBasis","[TRNS]この基盤に存在しないローカルID:{0}", localId);
 				_isStopped = true;
 				return;
 			}
@@ -158,7 +158,7 @@ namespace FlowAI
 			if (_currentNode.GetNextNode() == null)
 			{
 				_isStopped = true;
-				Debug.LogFormat("[TRNS]終端ノードに到達しました ローカルID:{0}", localId);
+				TFDebug.Log("FlowAIBasis","[TRNS]終端ノードに到達しました ローカルID:{0}", localId);
 				return;
 			}
 		}

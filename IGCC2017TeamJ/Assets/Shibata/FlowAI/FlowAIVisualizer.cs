@@ -133,7 +133,10 @@ namespace FlowAI
 			set
 			{
 				_target = value;
-				_targetBasis = _target.flowAI;
+				if (_target != null)
+					_targetBasis = _target.flowAI;
+				else
+					_targetBasis = null;
 			}
 		}
 
@@ -148,6 +151,9 @@ namespace FlowAI
 
 		void Prepare(FlowAINode node, int depthX, int depthY)
 		{
+			if (node == null)
+				return;
+
 			//準備済みノードならば終了
 			if (_prepares.Exists(item => item.node == node))
 				return;
@@ -447,7 +453,7 @@ namespace FlowAI
 		{
 			if(_isInSwapping)
 			{
-				_swappingElapsed += Time.deltaTime;
+				_swappingElapsed += Time.unscaledDeltaTime;
 				if(_swappingElapsed>_swappingDuration)
 				{
 					_isInSwapping = false;
