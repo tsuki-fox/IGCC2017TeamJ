@@ -333,9 +333,9 @@ namespace FlowAI
 			GL.PopMatrix();
 
 			
-			for (int f1 = 0; f1 < 10; f1++)
+			for (int f1 = 0; f1 < _lineDetailLevel; f1++)
 			{
-				var point = GetBezierRoute(begin, end, beginTan, endTan, (float)f1 / 10f);
+				var point = GetBezierRoute(begin, end, beginTan, endTan, (float)f1 / _lineDetailLevel);
 				var rect = new Rect(point, new Vector2(_wayPointSize, _wayPointSize));
 				rect.position -= new Vector2(rect.width / 2f, rect.height / 2f);
 				GUI.DrawTexture(rect, tex, ScaleMode.ScaleToFit, true, 1f, color, 0f, 0f);
