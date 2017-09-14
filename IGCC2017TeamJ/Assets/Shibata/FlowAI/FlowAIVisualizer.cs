@@ -127,7 +127,16 @@ namespace FlowAI
 		#endregion
 
 		#region properties
-		public FlowAIHolder target { get { return _target; } set { _target = value; } }
+		public FlowAIHolder target
+		{
+			get { return _target; }
+			set
+			{
+				_target = value;
+				_targetBasis = _target.flowAI;
+			}
+		}
+
 		public bool isVisible { get { return _isVisible; } set { _isVisible = value; } }
 		#endregion
 
