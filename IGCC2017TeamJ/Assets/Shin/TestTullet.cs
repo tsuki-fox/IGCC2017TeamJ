@@ -10,8 +10,7 @@ public class TestTullet : MonoBehaviour {
     bool _isRot = false;
     bool _isBullet = false;
     bool _isFound = false;
-  
-
+ 
     public float interval = 1.0f;
 
     private float time = 0.0f;
@@ -20,11 +19,17 @@ public class TestTullet : MonoBehaviour {
 
     bool canSeePlayerPrevious = false;
 
+    Animator animator;
+
     // VisionCone
     [SerializeField]
     private VisionCone _visionCone;
 
     private GameObject Player = null;
+
+    [SerializeField]
+    private GameObject head;
+
 
     // Shooting
     [SerializeField]
@@ -72,9 +77,6 @@ public class TestTullet : MonoBehaviour {
         var ShootingNode = new ProcessNode();
         var StopShootingNode = new ProcessNode();
 
-        //// 真偽
-        //var alertNode = new ProcessNode();
-        //var stopAlertNode = new ProcessNode();
 
         foundBranch.summary = "見てる?";
         missingBranch.summary = "見てない";
@@ -96,9 +98,6 @@ public class TestTullet : MonoBehaviour {
         ShootingNode.Initialize(0.1f, foundBranch2, () => _isBullet = true);
         StopShootingNode.Initialize(0.1f, rotNode   , () => _isBullet = false);
 
-        //alertNode.Initialize(0.1f, rotNode, () => Debug.Log("Alert!"));
-        //stopAlertNode.Initialize(0.1f, stopRotNode, () => Debug.Log("Alert stopped"));
-
         foundBranch.Initialize(stopRotNode, 0.1f, rotNode, 0.1f, () => _isFound);
         missingBranch.Initialize(rotNode, 0.1f, stopRotNode, 0.1f, () => !_isFound);
 
@@ -113,6 +112,10 @@ public class TestTullet : MonoBehaviour {
 
         //AI開始 Transition entry point.
         _flowAI.Entry();
+
+        animator = GetComponent<Animator>();
+
+        //animator.SetTrigger("Shot");
     }
 
     void Awake()
@@ -169,17 +172,14 @@ public class TestTullet : MonoBehaviour {
         //Any process...
         if (_isRot)
         {
-            this.transform.Rotate(new Vector3(0f, 60f * Time.deltaTime));
+            
+            //head.transform.Rotate(new Vector3(0,0, 60f * Time.deltaTime));
+            this.transform.Rotate(new Vector3(0,60f * Time.deltaTime));
+            head.transform.Rotate(new Vector3(0, (((-1)*60f) * Time.deltaTime)));
         }
         if(_isBullet)
         {
 
-            //this.transform.Rotate(new Vector3(Player.transform.rotation.x, 0, 0));
-            //if (time >= interval)
-            //{
-            //    GetComponent<BulletManager>().AttackBullet();
-            //    time = 0;
-            //}
             Shoot();
         }
 
@@ -253,7 +253,7 @@ public class TestTullet : MonoBehaviour {
         {
             GameObject bullet = GameObject.Instantiate(bulletObject);
             Bullet bulletComponent = bullet.GetComponent<Bullet>();
-
+            animator.SetTrigger("Shot");
             Assert.AreNotEqual(bulletComponent, null);
 
             bullet.transform.position = transform.position;
