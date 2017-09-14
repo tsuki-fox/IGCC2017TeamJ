@@ -1,1 +1,4 @@
-sceneSetups: []
+sceneSetups:
+- path: Assets/Terry/Scenes/Scene_Terry.unity
+  isLoaded: 1
+  isActive: 1
