@@ -275,10 +275,10 @@ public class EnemyControl_Patrol : MonoBehaviour
 	}
 
     int IncreaseWaypointIndex() {
-        activeWaypoint = 0;
-
         if (waypoints.Count >= 0) {
             activeWaypoint = (activeWaypoint + 1) % waypoints.Count;
+        } else {
+            activeWaypoint = 0;
         }
 
         return activeWaypoint;
