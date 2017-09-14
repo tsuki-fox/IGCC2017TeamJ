@@ -16,11 +16,16 @@ public class HpCamera : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        /*Player.*/transform.rotation = rotateCamera.transform.rotation;
+        // 常にカメラを見る処理
+        transform.rotation = rotateCamera.transform.rotation;
 	}
 
     public void Disable()
     {
+        // 死んだら消えてもらうぞい☆
         gameObject.SetActive(false);
     }
+
+
+
 }

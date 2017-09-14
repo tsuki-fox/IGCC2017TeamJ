@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class GameSystem : MonoBehaviour {
 
+    enum STAGE
+    {
+        FIRST,
+        SECOND,
+        THIRD
+    }
+
 	// Use this for initialization
 	void Start () {
 		
@@ -14,8 +21,30 @@ public class GameSystem : MonoBehaviour {
 		
 	}
 
+    // ゲームをスタートするときの関数
     public void GameStart()
     {
         Application.LoadLevel("Game");
+    }
+
+    // メニューに戻る時の関数
+    public void ReturnMenu()
+    {
+        Application.LoadLevel("Main");
+    }
+
+    public void StageTransition()
+    {
+        //switch()
+    }
+
+    // ゲーム終了するときの関数
+    public void  OnExit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+	Application.Quit();
+#endif
     }
 }
