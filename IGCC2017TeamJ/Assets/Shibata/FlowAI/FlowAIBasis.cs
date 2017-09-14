@@ -7,8 +7,8 @@ using System.Linq;
 
 namespace FlowAI
 {
-    [System.Serializable]
-    public class FlowAIBasis
+	[System.Serializable]
+	public class FlowAIBasis
 	{
 		#region inner class
 		/// <summary>FlowAIのエントリポイント用ノード</summary>
@@ -42,7 +42,7 @@ namespace FlowAI
 
 		#region private fields
 		int _idCount;   //ID生成用カウンタ
-        [SerializeField]
+		[SerializeField]
 		List<FlowAINode> _nodes;    //ノードリスト
 		EntryPointNode _entryPoint; //エントリポイント
 		FlowAINode _currentNode;    //現在のノード
@@ -175,6 +175,14 @@ namespace FlowAI
 			{
 				AddNode(item);
 			}
+		}
+
+		/// <summary>dummy</summary>
+		/// <param name="fromId">dummy</param>
+		/// <param name="toId">dummy</param>
+		public void Swap(int fromId, int toId)
+		{
+
 		}
 
 		/// <summary>擬似的にノードを交換する. Swap two nodes for imitative.</summary>

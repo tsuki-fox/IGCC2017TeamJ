@@ -79,6 +79,13 @@ namespace FlowAI
 		[SerializeField]
 		Color _activeLineColor = Color.red;     //アクティブ時の線の色
 
+		[SerializeField, Header("<Font settings>")]
+		Font _font;
+		[SerializeField]
+		int _fontSize;
+		[SerializeField]
+		Color _fontColor;
+
 		List<PrepareData> _prepares = new List<PrepareData>();  //準備済みリスト
 
 		[SerializeField]
@@ -162,32 +169,44 @@ namespace FlowAI
 				Rect nodeRect = new Rect(Vector2.zero, _nodeSize);
 				nodeRect.center = pos;
 
+				//テクスチャ描画
+				//使用色
+				Color usedColor = _nodeColor;
+				//使用テクスチャ
+				Texture2D usedTex = item.node is BranchNode ? _branchTex : _processTex;
+				//アスペクト比
+				float aspect = nodeRect.width / nodeRect.height;
+				//描画
+				GUI.DrawTexture(nodeRect, usedTex, ScaleMode.ScaleToFit, true, aspect, usedColor, 0f, 0f);
+
 				if (item.isActive)
 				{
+					GUIStyle progStyle = new GUIStyle();
+					progStyle.font = _font;
+					progStyle.fontSize = _fontSize;
+					GUIStyleState progState = new GUIStyleState();
+					progState.textColor = _fontColor;
+					progStyle.normal = progState;
+
+					Rect progRect = nodeRect;
+					progRect.position = new Vector2(progRect.position.x, progRect.position.y - _fontSize * 1.1f);
+
 					float progress = _targetBasis.elapsed / item.node.duration;
-					EditorGUI.ProgressBar(nodeRect, progress, "");
+					GUI.Label(progRect, string.Format("progress {0:0.00}...", progress * 100f), progStyle);
+
+					GUI.DrawTexture(nodeRect, usedTex, ScaleMode.ScaleToFit, true, aspect, _activeNodeColor, 0f, 0f);
 				}
 
-				if (item.isActive)
-					GUI.color = _activeNodeColor;
-				else
-					GUI.color = _nodeColor;
+				//summaryの描画
+				GUIStyle style = new GUIStyle();
+				style.font = _font;
+				style.fontSize = _fontSize;
+				style.alignment = TextAnchor.MiddleCenter;
+				GUIStyleState state = new GUIStyleState();
+				state.textColor = _fontColor;
+				style.normal = state;
 
-				//処理ノード及びエントリノードの描画
-				if (item.node is ProcessNode || item.node is FlowAIBasis.EntryPointNode)
-				{
-					GUI.DrawTexture(nodeRect, _processTex);
-				}
-				//分岐ノードの描画
-				else if (item.node is BranchNode)
-				{
-					GUI.DrawTexture(nodeRect, _branchTex);
-				}
-
-				GUI.Label(nodeRect, item.node.summary);
-
-				if (item.isActive)
-					GUI.color = Color.white;
+				GUI.Label(nodeRect, item.node.summary, style);
 			}
 		}
 

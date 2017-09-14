@@ -27,11 +27,11 @@ public class VisualizerTest : MonoBehaviour
 
 		rand1 = new BranchNode();
 
-		proc1.Initialize(1.0f, rand1, () => TFDebug.Log("visualizer", "proc1 finished"),"プロセス1");
-		proc2.Initialize(1.0f, proc3, () => TFDebug.Log("visualizer", "proc2 finished"),"プロセス2");
-		proc3.Initialize(1.0f, proc1, () => TFDebug.Log("visualizer", "proc3 finished"),"プロセス3");
-		proc4.Initialize(1.0f, proc5, () => TFDebug.Log("visualizer", "proc4 finished"),"プロセス4");
-		proc5.Initialize(1.0f, proc1, () => TFDebug.Log("visualizer", "proc5 finished"),"プロセス5");
+		proc1.Initialize(1.0f, rand1, () => TFDebug.Log("visualizer", "proc1 finished"),"PROCESS1");
+		proc2.Initialize(1.0f, proc3, () => TFDebug.Log("visualizer", "proc2 finished"),"PROCESS2");
+		proc3.Initialize(1.0f, proc1, () => TFDebug.Log("visualizer", "proc3 finished"),"PROCESS3");
+		proc4.Initialize(1.0f, proc5, () => TFDebug.Log("visualizer", "proc4 finished"),"PROCESS4");
+		proc5.Initialize(1.0f, proc1, () => TFDebug.Log("visualizer", "proc5 finished"),"PROCESS5");
 
 		rand1.Initialize(proc2, 1.0f, proc4, 1.0f, () =>
 		{
@@ -40,13 +40,7 @@ public class VisualizerTest : MonoBehaviour
 			return result;
 		});
 
-		proc1.summary = "プロセス1";
-		proc2.summary = "プロセス2";
-		proc3.summary = "プロセス3";
-		proc4.summary = "プロセス4";
-		proc5.summary = "プロセス5";
-
-		rand1.summary = "ランダム分岐1";
+		rand1.summary = "RANDOM";
 
 		_flowAI.AddNode(proc1, proc2, proc3, proc4, proc5, rand1);
 		_flowAI.entryPointNode.nextNode = proc1;

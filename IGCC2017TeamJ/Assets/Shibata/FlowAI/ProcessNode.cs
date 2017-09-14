@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace FlowAI
 {
-    [System.Serializable]
+	[System.Serializable]
 	public class ProcessNode : FlowAINode
 	{
 		#region events
