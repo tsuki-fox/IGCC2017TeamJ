@@ -57,22 +57,28 @@ MonoBehaviour:
   _arrowHeadTex: {fileID: 2800000, guid: b5b5185d86da1c94aaf68ac6744b8829, type: 3}
   _lineTex: {fileID: 0}
   _nodeColor: {r: 0, g: 0, b: 0, a: 1}
-  _activeNodeColor: {r: 0.5588235, g: 0.5588235, b: 0.5588235, a: 1}
+  _activeNodeColor: {r: 0.03529412, g: 1, b: 0, a: 1}
   _nodeVerticalSpace: 146.8
   _nodeHorizontalSpace: 234.1
   _nodeSize: {x: 180, y: 66}
   _focusNodeTex: {fileID: 2800000, guid: e8f352efefcdd3e4a8fd89a7d0a2f32e, type: 3}
-  _focusNodeTexColor: {r: 0.034482718, g: 1, b: 0, a: 1}
+  _focusNodeTexColor: {r: 1, g: 1, b: 1, a: 1}
   _selectedNodeTex: {fileID: 2800000, guid: e8f352efefcdd3e4a8fd89a7d0a2f32e, type: 3}
   _selectedNodeTexColor: {r: 0, g: 0.04827571, b: 1, a: 1}
   _windowPosition: {x: 25.9, y: 14.2}
   _windowSize: {x: 611.1, y: 816.1}
   _globalOffset: {x: 193.9, y: 125.1}
   _lineWidth: 3
-  _lineColor: {r: 0, g: 1, b: 0.048275948, a: 1}
-  _activeLineColor: {r: 1, g: 1, b: 1, a: 1}
+  _lineColor: {r: 0, g: 0, b: 0, a: 1}
+  _activeLineColor: {r: 0.03529412, g: 1, b: 0, a: 1}
   _font: {fileID: 12800000, guid: a45f18af24c4bb64f9fb9e9aa9e9a568, type: 3}
   _fontSize: 16
   _fontColor: {r: 0.19999993, g: 1, b: 0, a: 1}
   _isVisible: 1
   _swapMode: 1
+  _swappingDuration: 0.5
+  _exitButtonPosX: 19
+  _exitButtonPosY: 11
+  _exitButtonWidth: 159
+  _exitButtonHeight: 59
+  _afterDuration: 5

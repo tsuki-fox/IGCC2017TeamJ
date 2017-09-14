@@ -108,6 +108,18 @@ namespace FlowAI
 		int _swappingToId = -1;
 		float _swappingElapsed = 0f;
 
+		[SerializeField, Range(0f, 1600f),Header("Exit button settings")]
+		float _exitButtonPosX;
+		[SerializeField, Range(0, 960f)]
+		float _exitButtonPosY;
+		[SerializeField, Range(0, 500f)]
+		float _exitButtonWidth;
+		[SerializeField, Range(0, 500f)]
+		float _exitButtonHeight;
+
+		[SerializeField]
+		float _afterDuration = 5f;
+
 		bool _isInHacking = false;
 		float _showDuration;
 		float _showElapsed = 0f;
@@ -408,6 +420,14 @@ namespace FlowAI
 			}
 		}
 
+		void ExitButton(Rect pos)
+		{
+			if(GUI.Button(pos,("Exit Hacking")))
+			{
+				EndHacking(_afterDuration);
+			}
+		}
+
 		void Start()
 		{
 			if (_target != null)
@@ -452,13 +472,6 @@ namespace FlowAI
 					BeginHacking();
 				}
 			}
-			else
-			{
-				if (GUI.Button(new Rect(0, 0, 100, 33), "hack end"))
-				{
-					EndHacking(5f);
-				}
-			}
 
 			TFDebug.ClearMonitor("visualizer");
 			TFDebug.Write("visualizer", "show time:{0}\n", _showElapsed);
@@ -483,10 +496,11 @@ namespace FlowAI
 			DrawLines();
 			DrawNodes();
 			DrawFocus();
-			RevertButton(new Rect(_windowPosition + new Vector2(10f, 10f), new Vector2(100f, 33f)));			
 
 			if (_isInHacking)
 			{
+				ExitButton(new Rect(_exitButtonPosX + _windowPosition.x, _exitButtonPosY + _windowPosition.y, _exitButtonWidth, _exitButtonHeight));
+
 				PrepareData? focused = _prepares
 					.Select(item => item as PrepareData?)
 					.FirstOrDefault(item => item.Value.isFocus);
@@ -531,10 +545,12 @@ namespace FlowAI
 		{
 			_isInHacking = true;
 			_isVisible = true;
+		//	_targetBasis.isStopped = true;
 		}
 		public void EndHacking(float duration)
 		{
 			_isInHacking = false;
+		//	_targetBasis.isStopped = false;
 			_showElapsed = 0f;
 			_showDuration = duration;
 		}
