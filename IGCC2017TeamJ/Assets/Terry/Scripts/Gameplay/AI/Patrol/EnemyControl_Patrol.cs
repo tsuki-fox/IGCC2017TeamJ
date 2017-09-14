@@ -151,7 +151,7 @@ public class EnemyControl_Patrol : MonoBehaviour
     }
 
 	// Use this for initialization
-	void Awake () {
+	void Start () {
         //FlowAI生成 Create FlowAI.
         Assert.AreNotEqual(GetComponent<FlowAIHolder>(), null);
         flowAI = GetComponent<FlowAIHolder>().flowAI;
@@ -168,25 +168,25 @@ public class EnemyControl_Patrol : MonoBehaviour
         BranchNode checkReachedWaypointNode = new BranchNode();
         BranchNode checkPlayerEscapedNode = new BranchNode();
 
-        canSeePlayerNode.Initialize(alertNode, 0.0f, checkReachedWaypointNode, 0.0f, CanSeePlayer, "Can See Player?");
-        alertNode.Initialize(0.0f, playerInAttackRangeNode, AlertNodeFunction, "Alert Others");
-        checkReachedWaypointNode.Initialize(patrolReachedNode, 0.0f, patrolMoveNode, 0.0f, CheckReachedWaypoint, "Reached Waypoint?");
+        canSeePlayerNode.Initialize(alertNode, 0.1f, checkReachedWaypointNode, 0.1f, CanSeePlayer, "Can See Player?");
+        alertNode.Initialize(0.1f, playerInAttackRangeNode, AlertNodeFunction, "Alert Others");
+        checkReachedWaypointNode.Initialize(patrolReachedNode, 0.1f, patrolMoveNode, 0.1f, CheckReachedWaypoint, "Reached Waypoint?");
         
-        chaseNode.Initialize(0.0f, checkPlayerEscapedNode, ChaseNodeFunction, "Chase Target");
-        checkPlayerEscapedNode.Initialize(canSeePlayerNode, 0.0f, playerInAttackRangeNode, 0.0f, CheckPlayerEscaped, "Has Target Escaped?");
+        chaseNode.Initialize(0.1f, checkPlayerEscapedNode, ChaseNodeFunction, "Chase Target");
+        checkPlayerEscapedNode.Initialize(canSeePlayerNode, 0.1f, playerInAttackRangeNode, 0.1f, CheckPlayerEscaped, "Has Target Escaped?");
 
-        patrolMoveNode.Initialize(0.0f, canSeePlayerNode, PatrolMoveNodeFunction, "Patrol Move");
-        patrolReachedNode.Initialize(0.0f, canSeePlayerNode, PatrolReachedNodeFunction, "Patrol Reached Waypoint");
+        patrolMoveNode.Initialize(0.1f, canSeePlayerNode, PatrolMoveNodeFunction, "Patrol Move");
+        patrolReachedNode.Initialize(0.1f, canSeePlayerNode, PatrolReachedNodeFunction, "Patrol Reached Waypoint");
 
         switch (attackType) {
             case AttackType.AttackType_Explode:
-                explodeNode.Initialize(0.0f, null, ExplodeNodeFunction, "Explosion!");
-                playerInAttackRangeNode.Initialize(explodeNode, 0.0f, chaseNode, 0.0f, PlayerInAttackRange, "Is Target In Explosion Range?");
+                explodeNode.Initialize(0.1f, null, ExplodeNodeFunction, "Explosion!");
+                playerInAttackRangeNode.Initialize(explodeNode, 0.1f, chaseNode, 0.1f, PlayerInAttackRange, "Is Target In Explosion Range?");
                 flowAI.AddNode(explodeNode);
                 break;
             case AttackType.AttackType_Shoot:
                 shootNode.Initialize(1.0f, playerInAttackRangeNode, ShootNodeFunction, "Shoot!");
-                playerInAttackRangeNode.Initialize(shootNode, 0.0f, chaseNode, 0.0f, PlayerInAttackRange, "Is Target In Shooting Range?");
+                playerInAttackRangeNode.Initialize(shootNode, 0.1f, chaseNode, 0.1f, PlayerInAttackRange, "Is Target In Shooting Range?");
                 flowAI.AddNode(shootNode);
                 break;
             default:
@@ -206,16 +206,14 @@ public class EnemyControl_Patrol : MonoBehaviour
 
         // Initialise events.
         InitEvents();
+
+        chaseGiveUpTimer = chaseGiveUpDuration;
+        visionCone.SetMaterial(patrolCannotSeePlayerMaterial);
+        visionCone.CreateVisionConeObject(gameObject);
     }
 
     private void OnDestroy() {
         DeinitEvents();
-    }
-
-    private void Start() {
-        chaseGiveUpTimer = chaseGiveUpDuration;
-        visionCone.SetMaterial(patrolCannotSeePlayerMaterial);
-        visionCone.CreateVisionConeObject(gameObject);
     }
 
     // Update is called once per frame

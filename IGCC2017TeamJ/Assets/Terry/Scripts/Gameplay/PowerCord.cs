@@ -10,6 +10,7 @@ public class PowerCord : MonoBehaviour {
     public float timer = 0.0f;
     public float distance = 5.0f;
     public List<string> hackableTags;
+    public float timeScale = 0.0f;
 
     private bool isHacking = false;
 
@@ -68,7 +69,7 @@ public class PowerCord : MonoBehaviour {
                     Assert.AreNotEqual(visualizer, null);
                     visualizer.target = flowAIHolder;
 
-                    visualizer.BeginHacking(1.0f);
+                    visualizer.BeginHacking(timeScale);
 
                     gameObject.SetActive(false);
 

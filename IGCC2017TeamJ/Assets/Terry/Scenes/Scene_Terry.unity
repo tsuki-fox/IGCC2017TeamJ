@@ -808,7 +808,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1990432700055930, guid: c0c17152ddf97bd488f96245e4975b6b, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1990432700055930, guid: c0c17152ddf97bd488f96245e4975b6b, type: 2}
       propertyPath: m_TagString
@@ -1236,6 +1236,11 @@ Prefab:
     - target: {fileID: 4357246088397610, guid: 0769ddfab3e3bb0448b080e634c92104, type: 2}
       propertyPath: m_RootOrder
       value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 114425025853414038, guid: 0769ddfab3e3bb0448b080e634c92104,
+        type: 2}
+      propertyPath: _afterDuration
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0769ddfab3e3bb0448b080e634c92104, type: 2}
