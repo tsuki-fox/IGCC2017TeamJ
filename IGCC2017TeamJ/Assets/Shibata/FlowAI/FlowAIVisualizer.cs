@@ -478,7 +478,7 @@ namespace FlowAI
 			{
 				if (GUI.Button(new Rect(0, 0, 100, 33), "hack begin"))
 				{
-					BeginHacking();
+					BeginHacking(0.05f);
 				}
 			}
 
@@ -550,14 +550,16 @@ namespace FlowAI
 		}
 
 		#region public methods
-		public void BeginHacking()
+		public void BeginHacking(float timeScale)
 		{
+			Time.timeScale = timeScale;
 			_isInHacking = true;
 			_isVisible = true;
 		//	_targetBasis.isStopped = true;
 		}
 		public void EndHacking(float duration)
 		{
+			Time.timeScale = 1f;
 			_isInHacking = false;
 		//	_targetBasis.isStopped = false;
 			_showElapsed = 0f;
