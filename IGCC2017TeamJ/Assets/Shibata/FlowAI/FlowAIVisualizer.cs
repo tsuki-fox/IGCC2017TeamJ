@@ -272,18 +272,30 @@ namespace FlowAI
 				var swpFromRect = swpFrom.rect;
 				var swpToRect = swpTo.rect;
 
-				swpFromRect.position = Vector2.Lerp(swpToRect.position, swpFromRect.position, t);
-				swpToRect.position = Vector2.Lerp(swpFromRect.position, swpToRect.position, t);
+				swpFromRect.position = Vector2.Lerp(swpFrom.rect.position, swpTo.rect.position, t);
+				swpToRect.position = Vector2.Lerp(swpTo.rect.position, swpFrom.rect.position, t);
+
+				TFDebug.Write("visualizer", "lerp t:{0}\n", t);
 
 				GUI.DrawTexture(swpFromRect, _processTex, ScaleMode.ScaleToFit, true, _nodeSize.x / _nodeSize.y, _nodeColor, 0f, 0f);
 				GUI.DrawTexture(swpToRect, _processTex, ScaleMode.ScaleToFit, true, _nodeSize.x / _nodeSize.y, _nodeColor, 0f, 0f);
+
+				//summaryの描画
+				GUIStyle style = new GUIStyle();
+				style.font = _font;
+				style.fontSize = _fontSize;
+				style.alignment = TextAnchor.MiddleCenter;
+				GUIStyleState state = new GUIStyleState();
+				state.textColor = _fontColor;
+				style.normal = state;
+
+				GUI.Label(swpFromRect, swpTo.node.summary, style);
+				GUI.Label(swpToRect, swpFrom.node.summary, style);
 			}
 		}
 
 		Vector2 GetBezierRoute(Vector2 begin,Vector2 end,Vector2 beginTan,Vector2 endTan,float t)
 		{
-			//p_x = (1 - t) * (1 - t) * (1 - t) * p0_x + 3 * (1 - t) * (1 - t) * t * p1_x + 3 * (1 - t) * t * t * p2_x + t * t * t * p3_x;
-			//p_y = (1 - t) * (1 - t) * (1 - t) * p0_y + 3 * (1 - t) * (1 - t) * t * p1_y + 3 * (1 - t) * t * t * p2_y + t * t * t * p3_y;
 			Vector2 res = new Vector2();
 			res.x = (1 - t) * (1 - t) * (1 - t) * begin.x + 3 * (1 - t) * (1 - t) * t * beginTan.x + 3 * (1 - t) * t * t * endTan.x + t * t * t * end.x;
 			res.y = (1 - t) * (1 - t) * (1 - t) * begin.y + 3 * (1 - t) * (1 - t) * t * beginTan.y + 3 * (1 - t) * t * t * endTan.y + t * t * t * end.y;
@@ -338,13 +350,6 @@ namespace FlowAI
 			//同じノードなら
 			if (from.node == to.node)
 			{
-				/*
-				Handles.DrawBezier(begin, end,
-						begin + new Vector2(_nodeSize.x, _nodeSize.y * 3f),
-						end + new Vector2(_nodeSize.x, -_nodeSize.y * 3f),
-						color, _lineTex, _lineWidth);
-				*/
-
 				DrawBezierCurve(begin, end,
 						begin + new Vector2(_nodeSize.x, _nodeSize.y * 3f),
 						end + new Vector2(_nodeSize.x, -_nodeSize.y * 3f),
@@ -358,13 +363,6 @@ namespace FlowAI
 				//Xが同じ深さ
 				if (from.depthX == to.depthX)
 				{
-					/*
-					Handles.DrawBezier(begin, end,
-						begin - new Vector2(_nodeSize.x, 0f),
-						end + new Vector2(_nodeSize.x, 0f),
-						color, _lineTex, _lineWidth);
-						*/
-
 					DrawBezierCurve(begin, end,
 							begin - new Vector2(_nodeSize.x, 0f),
 							end + new Vector2(_nodeSize.x, 0f),
@@ -373,12 +371,6 @@ namespace FlowAI
 				//右
 				else if (from.depthX < to.depthY)
 				{
-					/*
-					Handles.DrawBezier(begin, end,
-						begin + new Vector2(_nodeSize.x, 0f),
-						end,
-						color, _lineTex, _lineWidth);
-					*/
 					DrawBezierCurve(begin, end,
 						begin + new Vector2(_nodeSize.x, 0f),
 						end,
@@ -387,12 +379,6 @@ namespace FlowAI
 				//左
 				else
 				{
-					/*
-					Handles.DrawBezier(begin, end,
-						begin,
-						end - new Vector2(_nodeSize.x, 0f),
-						color, _lineTex, _lineWidth);
-					*/
 					DrawBezierCurve(begin, end,
 						begin,
 						end - new Vector2(_nodeSize.x, 0f),
@@ -406,12 +392,6 @@ namespace FlowAI
 				//Xが同じ深さ
 				if (from.depthX == to.depthX)
 				{
-					/*
-					Handles.DrawBezier(begin, end,
-						begin - new Vector2(_nodeSize.x, -_nodeSize.y * 3f),
-						end - new Vector2(_nodeSize.x, _nodeSize.y * 3f),
-						color, _lineTex, _lineWidth);
-					*/
 					DrawBezierCurve(begin, end,
 						begin - new Vector2(_nodeSize.x, -_nodeSize.y * 3f),
 						end - new Vector2(_nodeSize.x, _nodeSize.y * 3f),
@@ -420,12 +400,6 @@ namespace FlowAI
 				//右
 				else if (from.depthX < to.depthY)
 				{
-					/*
-					Handles.DrawBezier(begin, end,
-						begin - new Vector2(_nodeSize.x, 0f),
-						end - new Vector2(_nodeSize.x, 0f),
-						color, _lineTex, _lineWidth);
-					*/
 					DrawBezierCurve(begin, end,
 						begin - new Vector2(_nodeSize.x, 0f),
 						end - new Vector2(_nodeSize.x, 0f),
@@ -434,12 +408,6 @@ namespace FlowAI
 				//左
 				else
 				{
-					/*
-					Handles.DrawBezier(begin, end,
-						begin + new Vector2(_nodeSize.x * 2f, _nodeSize.y * 3f),
-						end + new Vector2(_nodeSize.x, -_nodeSize.y * 3f),
-						color, _lineTex, _lineWidth);
-					*/
 					DrawBezierCurve(begin, end,
 						begin + new Vector2(_nodeSize.x * 2f, _nodeSize.y * 3f),
 						end + new Vector2(_nodeSize.x, -_nodeSize.y * 3f),
@@ -531,8 +499,11 @@ namespace FlowAI
 			GUI.DrawTexture(from.rect, _selectedNodeTex);
 			GUI.color = temp;
 
-		//	Handles.DrawBezier(from.rect.center, mousePos, from.rect.center, mousePos, Color.red, null, 5f);
+			//	Handles.DrawBezier(from.rect.center, mousePos, from.rect.center, mousePos, Color.red, null, 5f);
+
+			GL.Begin(GL.QUADS);
 			DrawLine2D(from.rect.center, mousePos, _lineWidth, Color.red);
+			GL.End();
 		}
 
 		void RevertButton(Rect pos)
@@ -562,7 +533,9 @@ namespace FlowAI
 
 		void Update()
 		{
-			if(_isInSwapping)
+			TFDebug.ClearMonitor("visualizer");
+
+			if (_isInSwapping)
 			{
 				_swappingElapsed += Time.unscaledDeltaTime;
 				if(_swappingElapsed>_swappingDuration)
@@ -599,7 +572,6 @@ namespace FlowAI
 				}
 			}
 
-			TFDebug.ClearMonitor("visualizer");
 			TFDebug.Write("visualizer", "show time:{0}\n", _showElapsed);
 
 			//非表示
@@ -660,8 +632,7 @@ namespace FlowAI
 
 				if (_isInDrag)
 					OnSwap();
-
-				TFDebug.ClearMonitor("visualizer");
+				
 				TFDebug.Write("visualizer", "is in swap:{0}\n", _isInDrag.ToString());
 			}
 		}
