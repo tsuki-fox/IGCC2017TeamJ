@@ -7,6 +7,8 @@ public class EnemyControl : MonoBehaviour
 {
 	public FlowAIBasis _flowAI;
 
+   
+
 	bool _isRot = false;
 	bool _isFound = false;
 
@@ -21,6 +23,9 @@ public class EnemyControl : MonoBehaviour
 		if (other.name == "Player")
 			_isFound = false;
 	}
+
+
+
 
 	// Use this for initialization
 	void Start ()
