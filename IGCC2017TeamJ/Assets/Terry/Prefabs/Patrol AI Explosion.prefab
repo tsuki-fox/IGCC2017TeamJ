@@ -73,7 +73,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24356568, guid: c493f86239878f449be8ae7cff7245d3,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: 809108b96bc06bf449a92211eb918325, type: 3}
+  m_audioClip: {fileID: 8300000, guid: e7cba4c7ccac11c41a8e76695ad339ea, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 120276}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f79c6ad121540c46aa5b74c2c67421e, type: 3}
+  m_Script: {fileID: 11500000, guid: c285808672b81884a8a0b0e3bc834576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!198 &19806484
@@ -6698,7 +6698,7 @@ ParticleSystemRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: c63a7789392b6fb46a26300c0095d699, type: 2}
+  - {fileID: 2100000, guid: 62f43a11ea7cd1543b60bda8bc5056ad, type: 2}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0

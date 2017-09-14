@@ -1,0 +1,355 @@
+fileFormatVersion: 2
+guid: 0b78891f0a1e686459ea1bc50bf91255
+timeCreated: 1505367813
+licenseType: Free
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: All
+    100002: Bone001
+    100004: Bone001(mirrored)
+    100006: Bone001(mirrored)001
+    100008: Bone002
+    100010: Bone002(mirrored)
+    100012: Bone002(mirrored)001
+    100014: Bone003
+    100016: Bone003(mirrored)
+    100018: Bone003(mirrored)001
+    100020: Bone004
+    100022: Bone004(mirrored)
+    100024: Bone004(mirrored)001
+    100026: Bone005
+    100028: Bone006
+    100030: Bone007
+    100032: Bone008
+    100034: Box001
+    100036: Box021
+    100038: Box022
+    100040: Box024
+    100042: Box026
+    100044: Box027
+    100046: Box033
+    100048: Box034
+    100050: Box035
+    100052: Box036
+    100054: Box037
+    100056: Box043
+    100058: Box044
+    100060: Box045
+    100062: Box046
+    100064: Box047
+    100066: Box048
+    100068: Box049
+    100070: Box050
+    100072: Box051
+    100074: Box052
+    100076: Cylinder003
+    100078: Cylinder004
+    100080: //RootNode
+    100082: houtou
+    100084: IK Chain001
+    100086: IK Chain002
+    100088: IK Chain003
+    100090: IK Chain004
+    100092: left front
+    100094: left front ne
+    100096: left front rota
+    100098: left houtou
+    100100: left rear
+    100102: left rear ne
+    100104: left rear rota
+    100106: light front
+    100108: light front ne
+    100110: light front rota
+    100112: light houtou
+    100114: light rear
+    100116: light rear ne
+    100118: light rear rota
+    100120: Point001
+    100122: Point002
+    100124: Point003
+    100126: Point004
+    100128: Point005
+    100130: Point006
+    100132: Point013
+    100134: Point014
+    100136: Point015
+    100138: Point016
+    100140: Point017
+    100142: Point018
+    100144: Point025
+    100146: Point026
+    100148: Point027
+    100150: Point028
+    100152: Point029
+    100154: Point030
+    100156: Point031
+    100158: Point032
+    100160: Point033
+    100162: Point034
+    100164: Point035
+    100166: Point036
+    100168: Point037
+    100170: Point038
+    100172: Rota
+    100174: Shape001
+    100176: Shape002
+    100178: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8003"
+    100180: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8004"
+    100182: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8008"
+    100184: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8010"
+    100186: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8012"
+    100188: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8013"
+    400000: All
+    400002: Bone001
+    400004: Bone001(mirrored)
+    400006: Bone001(mirrored)001
+    400008: Bone002
+    400010: Bone002(mirrored)
+    400012: Bone002(mirrored)001
+    400014: Bone003
+    400016: Bone003(mirrored)
+    400018: Bone003(mirrored)001
+    400020: Bone004
+    400022: Bone004(mirrored)
+    400024: Bone004(mirrored)001
+    400026: Bone005
+    400028: Bone006
+    400030: Bone007
+    400032: Bone008
+    400034: Box001
+    400036: Box021
+    400038: Box022
+    400040: Box024
+    400042: Box026
+    400044: Box027
+    400046: Box033
+    400048: Box034
+    400050: Box035
+    400052: Box036
+    400054: Box037
+    400056: Box043
+    400058: Box044
+    400060: Box045
+    400062: Box046
+    400064: Box047
+    400066: Box048
+    400068: Box049
+    400070: Box050
+    400072: Box051
+    400074: Box052
+    400076: Cylinder003
+    400078: Cylinder004
+    400080: //RootNode
+    400082: houtou
+    400084: IK Chain001
+    400086: IK Chain002
+    400088: IK Chain003
+    400090: IK Chain004
+    400092: left front
+    400094: left front ne
+    400096: left front rota
+    400098: left houtou
+    400100: left rear
+    400102: left rear ne
+    400104: left rear rota
+    400106: light front
+    400108: light front ne
+    400110: light front rota
+    400112: light houtou
+    400114: light rear
+    400116: light rear ne
+    400118: light rear rota
+    400120: Point001
+    400122: Point002
+    400124: Point003
+    400126: Point004
+    400128: Point005
+    400130: Point006
+    400132: Point013
+    400134: Point014
+    400136: Point015
+    400138: Point016
+    400140: Point017
+    400142: Point018
+    400144: Point025
+    400146: Point026
+    400148: Point027
+    400150: Point028
+    400152: Point029
+    400154: Point030
+    400156: Point031
+    400158: Point032
+    400160: Point033
+    400162: Point034
+    400164: Point035
+    400166: Point036
+    400168: Point037
+    400170: Point038
+    400172: Rota
+    400174: Shape001
+    400176: Shape002
+    400178: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8003"
+    400180: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8004"
+    400182: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8008"
+    400184: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8010"
+    400186: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8012"
+    400188: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8013"
+    2300000: Box001
+    2300002: Box021
+    2300004: Box022
+    2300006: Box024
+    2300008: Box026
+    2300010: Box027
+    2300012: Box033
+    2300014: Box034
+    2300016: Box035
+    2300018: Box036
+    2300020: Box037
+    2300022: Box043
+    2300024: Box044
+    2300026: Box045
+    2300028: Box046
+    2300030: Box047
+    2300032: Box048
+    2300034: Box049
+    2300036: Box050
+    2300038: Box051
+    2300040: Box052
+    2300042: Cylinder003
+    2300044: Cylinder004
+    2300046: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8008"
+    2300048: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8010"
+    2300050: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8012"
+    2300052: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8013"
+    3300000: Box001
+    3300002: Box021
+    3300004: Box022
+    3300006: Box024
+    3300008: Box026
+    3300010: Box027
+    3300012: Box033
+    3300014: Box034
+    3300016: Box035
+    3300018: Box036
+    3300020: Box037
+    3300022: Box043
+    3300024: Box044
+    3300026: Box045
+    3300028: Box046
+    3300030: Box047
+    3300032: Box048
+    3300034: Box049
+    3300036: Box050
+    3300038: Box051
+    3300040: Box052
+    3300042: Cylinder003
+    3300044: Cylinder004
+    3300046: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8008"
+    3300048: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8010"
+    3300050: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8012"
+    3300052: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8013"
+    4300000: Box001
+    4300002: Cylinder004
+    4300004: Cylinder003
+    4300006: Box046
+    4300008: Box044
+    4300010: Box043
+    4300012: Box045
+    4300014: Box047
+    4300016: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8012"
+    4300018: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8013"
+    4300020: Box050
+    4300022: Box052
+    4300024: Box048
+    4300026: Box051
+    4300028: Box049
+    4300030: Box021
+    4300032: Box027
+    4300034: Box026
+    4300036: Box024
+    4300038: Box022
+    4300040: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8008"
+    4300042: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8010"
+    4300044: Box034
+    4300046: Box037
+    4300048: Box036
+    4300050: Box033
+    4300052: Box035
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

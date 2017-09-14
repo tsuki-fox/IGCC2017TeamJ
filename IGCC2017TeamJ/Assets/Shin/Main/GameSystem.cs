@@ -30,7 +30,7 @@ public class GameSystem : MonoBehaviour
     // ゲームをスタートするときの関数
     public void GameStart()
     {
-        Application.LoadLevel("Scene01");
+        Application.LoadLevel("scene01");
     }
 
     public void EndGame()

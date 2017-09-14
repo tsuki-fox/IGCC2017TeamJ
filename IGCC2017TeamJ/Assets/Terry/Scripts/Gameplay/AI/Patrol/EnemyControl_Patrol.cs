@@ -42,6 +42,8 @@ public class EnemyControl_Patrol : MonoBehaviour
     [SerializeField]
     private int explosionDamage = 50;
     [SerializeField]
+    private float explosionRange = 12.0f;
+    [SerializeField]
     private List<string> explosionBlockerTags;
 
     // Shooting
@@ -147,6 +149,7 @@ public class EnemyControl_Patrol : MonoBehaviour
         }
         
         chaseGiveUpTimer = chaseGiveUpDuration;
+       // flowAI.Swap(chaseNodeId, flowAI.currentNode.localId);
         flowAI.Transition(chaseNodeId);
     }
 
@@ -334,7 +337,7 @@ public class EnemyControl_Patrol : MonoBehaviour
 
         // Deal damage to the player.
         Vector3 directionToPlayer = player.transform.position - gameObject.transform.position;
-        if (directionToPlayer.sqrMagnitude <= attackRange) {
+        if (directionToPlayer.sqrMagnitude <= explosionRange * explosionRange) {
             // Raycast to ensure that nothing is blocking the explosion.
             if (!GameplayHelper.HasObstaclesBetween(gameObject.transform.position, player.transform.position, explosionBlockerTags)) {
                 Health playerHealth = player.GetComponent<Health>();

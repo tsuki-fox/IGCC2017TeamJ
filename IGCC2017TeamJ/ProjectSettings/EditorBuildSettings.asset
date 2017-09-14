@@ -4,4 +4,16 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Shin/Main/Main.unity
+    guid: d4d225fa4ae763b4685a360b9c388b5c
+  - enabled: 1
+    path: Assets/Leura/scene01.unity
+    guid: 1420393bb93aa7e4486ba8c27538bdc6
+  - enabled: 1
+    path: Assets/Shin/Main/End.unity
+    guid: 82f08f234d67af74284ff80a7e421a86
+  - enabled: 1
+    path: Assets/Shin/Main/Win.unity
+    guid: dc48d2bded60c4f49929826ea8fffec9

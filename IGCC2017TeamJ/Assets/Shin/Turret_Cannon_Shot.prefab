@@ -499,10 +499,10 @@ MonoBehaviour:
   interval: 1
   _visionCone:
     obstacleTags: []
-    viewAngle: 45
-    viewDistance: 5
-    numSlices: 12
-    numDivisions: 4
+    viewAngle: 15
+    viewDistance: 15
+    numSlices: 10
+    numDivisions: 10
     coneMaterial: {fileID: 2100000, guid: 55ad2cc2c2d036a44883b8ae5d9af6b9, type: 2}
     coneAlpha: 0.4
   head: {fileID: 1329436079382762}

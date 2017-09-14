@@ -55,7 +55,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 4c740d5c9346b8249b3d0513b1b7d253, type: 2}
+  - {fileID: 2100000, guid: 4b78819ca1522c84989d091dc54c3e51, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -80,7 +80,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1304566772994388}
-  m_Mesh: {fileID: 4300000, guid: 343e97f8c0dcd4a4ab2ec5226bccea68, type: 3}
+  m_Mesh: {fileID: 4300000, guid: dcc8ff724f3a9bd498d44b6b322f64d3, type: 3}
 --- !u!114 &114711969696977138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -89,11 +89,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1304566772994388}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dff3238d6f53b9543a825b5ce5717908, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ff7a5d51903b5341919f0e6d369f41b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.5
+  duration: 1
   timer: 0
   distance: 5
   hackableTags:
   - Enemy
+  timeScale: 0
