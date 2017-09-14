@@ -16,7 +16,6 @@ public class GameplayChannel : EventChannel {
     public event Void_CharacterDeathInfo EnemyDeathEvent;
     public event Void_Void ResetItemsEvent;
     public event Void_Bool PlayerHidingEvent;
-    public event Void_Void WinEvent;
 
     public event Void_Void RequestPlayerEvent; // 主人公は誰ですか。
     public event Void_GameObject ReplyPlayerEvent;　// 私！
@@ -33,12 +32,6 @@ public class GameplayChannel : EventChannel {
     public void SendEnemyDeathEvent(CharacterDeathInfo _info) {
         if (EnemyDeathEvent != null) {
             EnemyDeathEvent(_info);
-        }
-    }
-
-    public void SendWinEvent() {
-        if (WinEvent != null) {
-            WinEvent();
         }
     }
 
