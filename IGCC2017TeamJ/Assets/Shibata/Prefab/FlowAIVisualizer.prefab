@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1809377607002090}
+  m_IsPrefabParent: 1
+--- !u!1 &1809377607002090
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4357246088397610}
+  - component: {fileID: 114425025853414038}
+  m_Layer: 0
+  m_Name: FlowAIVisualizer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4357246088397610
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1809377607002090}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.6449876, y: 2.4047763, z: 8.86113}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114425025853414038
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1809377607002090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 547ca3bd85d232547b4b111f68c72518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 0}
+  _processTex: {fileID: 2800000, guid: e8f352efefcdd3e4a8fd89a7d0a2f32e, type: 3}
+  _branchTex: {fileID: 2800000, guid: 0e151fef4142fbd48bf32aacea2783da, type: 3}
+  _arrowHeadTex: {fileID: 2800000, guid: b5b5185d86da1c94aaf68ac6744b8829, type: 3}
+  _lineTex: {fileID: 0}
+  _nodeColor: {r: 1, g: 1, b: 1, a: 1}
+  _activeNodeColor: {r: 1, g: 0, b: 0, a: 1}
+  _nodeVerticalSpace: 146.8
+  _nodeHorizontalSpace: 234.1
+  _nodeSize: {x: 180, y: 66}
+  _focusNodeTex: {fileID: 2800000, guid: e8f352efefcdd3e4a8fd89a7d0a2f32e, type: 3}
+  _focusNodeTexColor: {r: 0.034482718, g: 1, b: 0, a: 1}
+  _selectedNodeTex: {fileID: 2800000, guid: e8f352efefcdd3e4a8fd89a7d0a2f32e, type: 3}
+  _selectedNodeTexColor: {r: 0, g: 0.04827571, b: 1, a: 1}
+  _windowPosition: {x: 25.9, y: 14.2}
+  _windowSize: {x: 611.1, y: 816.1}
+  _globalOffset: {x: 193.9, y: 125.1}
+  _lineWidth: 3
+  _lineColor: {r: 1, g: 1, b: 1, a: 1}
+  _activeLineColor: {r: 1, g: 0, b: 0, a: 1}
+  _isVisible: 1
+  _swapMode: 1

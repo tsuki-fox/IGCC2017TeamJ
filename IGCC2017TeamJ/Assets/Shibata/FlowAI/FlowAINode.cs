@@ -6,10 +6,10 @@ namespace FlowAI
 {
 	public abstract class FlowAINode
 	{
-		#region private fields
-		int _localId = -1;	//ローカルID
-		float _duration;    //遷移時間
-		string _summary;	//ノードの概要説明用文字列
+		#region protected fields
+		protected int _localId = -1;	//ローカルID
+		protected float _duration;    //遷移時間
+		protected string _summary;	//ノードの概要説明用文字列
 		
 		#endregion
 

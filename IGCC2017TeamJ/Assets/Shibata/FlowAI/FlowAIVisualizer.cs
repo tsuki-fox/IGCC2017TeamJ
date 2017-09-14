@@ -15,51 +15,65 @@ namespace FlowAI
 			public int depthX;
 			public int depthY;
 			public bool isActive;
+			public bool isFocus;
+			public Rect rect;
 
-			public PrepareData(FlowAINode node,int depthX,int depthY,bool isActive)
+			public PrepareData(FlowAINode node, int depthX, int depthY, bool isActive, bool isFocus, Rect rect)
 			{
 				this.node = node;
 				this.depthX = depthX;
 				this.depthY = depthY;
 				this.isActive = isActive;
+				this.rect = rect;
+				this.isFocus = isFocus;
 			}
 		}
 
 		#region private fields
 		[SerializeField]
-		FlowAIHolder _target;		//ターゲットAIホルダ
-		FlowAIBasis _targetBasis;	//ターゲットAI
+		FlowAIHolder _target;       //ターゲットAIホルダ
+		FlowAIBasis _targetBasis;   //ターゲットAI
 
+		[SerializeField, Header("<Node visuals>")]
+		Texture2D _processTex;      //処理ノードテクスチャ
 		[SerializeField]
-		Texture2D _processTex;		//処理ノードテクスチャ
+		Texture2D _branchTex;       //分岐ノードテクスチャ
 		[SerializeField]
-		Texture2D _branchTex;		//分岐ノードテクスチャ
-		[SerializeField]
-		Texture2D _arrowHeadTex;	//矢印テクスチャ
+		Texture2D _arrowHeadTex;    //矢印テクスチャ
 		[SerializeField]
 		Texture2D _lineTex;         //線テクスチャ
-
 		[SerializeField]
 		Color _nodeColor = Color.white;
 		[SerializeField]
 		Color _activeNodeColor = Color.red;
-
 		[SerializeField]
-		Vector2 _windowPosition;    //ウィンドウの位置
+		float _nodeVerticalSpace = 20f;     //ノード間の垂直方向の間隔
 		[SerializeField]
-		Vector2 _windowSize;		//ウィンドウのサイズ
-		[SerializeField]
-		Vector2 _globalOffset;		//全体のオフセット
-
-		[SerializeField]
-		float _nodeVerticalSpace = 20f;		//ノード間の垂直方向の間隔
-		[SerializeField]
-		float _nodeHorizontalSpace = 20f;	//ノード間の水平方向の間隔
+		float _nodeHorizontalSpace = 20f;   //ノード間の水平方向の間隔
 		[SerializeField]
 		Vector2 _nodeSize = new Vector2(100f, 33f); //ノードの大きさ
 
+
+		[SerializeField, Header("<Focuses>")]
+		Texture2D _focusNodeTex;     //フォーカス中のノードのテクスチャ
 		[SerializeField]
-		float _lineWidth = 3f;					//線の太さ
+		Color _focusNodeTexColor = Color.green;   //フォーカス中のノードの色
+
+		[SerializeField, Header("<Selected node>")]
+		Texture2D _selectedNodeTex;
+		[SerializeField]
+		Color _selectedNodeTexColor = Color.green;
+
+
+		[SerializeField, Header("<Window settings>")]
+		Vector2 _windowPosition;    //ウィンドウの位置
+		[SerializeField]
+		Vector2 _windowSize;        //ウィンドウのサイズ
+		[SerializeField]
+		Vector2 _globalOffset;      //全体のオフセット
+
+		[SerializeField, Header("<Line settings>")]
+		float _lineWidth = 3f;                  //線の太さ
 		[SerializeField]
 		Color _lineColor = Color.white;         //線の色
 		[SerializeField]
@@ -68,7 +82,16 @@ namespace FlowAI
 		List<PrepareData> _prepares = new List<PrepareData>();  //準備済みリスト
 
 		[SerializeField]
-		bool _isVisible = true;	//表示フラグ
+		bool _isVisible = true; //表示フラグ
+		[SerializeField]
+		bool _swapMode = false;
+
+		FlowAINode _from = null;
+		FlowAINode _to = null;
+		bool _isInSwap = false;
+
+		int _maxDepthX;
+		int _maxDepthY;
 		#endregion
 
 		#region properties
@@ -82,17 +105,31 @@ namespace FlowAI
 			Prepare(node, 0, 0);
 		}
 
-		void Prepare(FlowAINode node,int depthX,int depthY)
+		void Prepare(FlowAINode node, int depthX, int depthY)
 		{
 			//準備済みノードならば終了
 			if (_prepares.Exists(item => item.node == node))
 				return;
 
+			_maxDepthX = Mathf.Max(depthX, _maxDepthX);
+			_maxDepthY = Mathf.Max(depthY, _maxDepthY);
+
 			//準備済みリストに追加
-			_prepares.Add(new PrepareData(node, depthX, depthY, _targetBasis.currentNode == node));
+			//位置
+			Vector2 pos = new Vector2(depthX * _nodeHorizontalSpace, depthY * _nodeVerticalSpace);
+			pos += _globalOffset;
+
+			//矩形
+			Rect nodeRect = new Rect(Vector2.zero, _nodeSize);
+			nodeRect.center = pos;
+
+			Vector2 mousePos = Input.mousePosition;
+			mousePos.y = Screen.height - mousePos.y;
+
+			_prepares.Add(new PrepareData(node, depthX, depthY, _targetBasis.currentNode == node, nodeRect.Contains(mousePos), nodeRect));
 
 			//処理ノードかエントリポイントノードならば
-			if(node is ProcessNode || node is FlowAIBasis.EntryPointNode)
+			if (node is ProcessNode || node is FlowAIBasis.EntryPointNode)
 			{
 				//Y方向の深さを1つ掘る
 				Prepare(node.GetNextNode(), depthX, depthY + 1);
@@ -100,7 +137,7 @@ namespace FlowAI
 			}
 
 			//分岐ノードならば
-			else if(node is BranchNode)
+			else if (node is BranchNode)
 			{
 				var branch = node as BranchNode;
 
@@ -142,7 +179,7 @@ namespace FlowAI
 					GUI.DrawTexture(nodeRect, _processTex);
 				}
 				//分岐ノードの描画
-				else if(item.node is BranchNode)
+				else if (item.node is BranchNode)
 				{
 					GUI.DrawTexture(nodeRect, _branchTex);
 				}
@@ -154,10 +191,10 @@ namespace FlowAI
 			}
 		}
 
-		void DrawBezier(Vector2 begin, Vector2 end, PrepareData from, PrepareData to,Color color)
+		void DrawBezier(Vector2 begin, Vector2 end, PrepareData from, PrepareData to, Color color)
 		{
 			//同じノードなら
-			if(from.node==to.node)
+			if (from.node == to.node)
 			{
 				Handles.DrawBezier(begin, end,
 						begin + new Vector2(_nodeSize.x, _nodeSize.y * 3f),
@@ -227,7 +264,7 @@ namespace FlowAI
 
 		void DrawLines()
 		{
-			foreach(var item in _prepares)
+			foreach (var item in _prepares)
 			{
 				//位置
 				Vector2 pos = new Vector2(item.depthX * _nodeHorizontalSpace, item.depthY * _nodeVerticalSpace);
@@ -247,7 +284,7 @@ namespace FlowAI
 					else
 						DrawBezier(begin, end, item, next, _lineColor);
 				}
-				else if(item.node is BranchNode)
+				else if (item.node is BranchNode)
 				{
 					var branch = item.node as BranchNode;
 
@@ -279,7 +316,47 @@ namespace FlowAI
 					}
 				}
 			}
+		}
 
+		void DrawFocus()
+		{
+			foreach (var item in _prepares)
+			{
+				if (item.isFocus&&item.node is ProcessNode)
+				{
+					TFDebug.Log("x", "LID:{0}", item.node.localId);
+					var temp = GUI.color;
+					GUI.color = _focusNodeTexColor;
+					GUI.DrawTexture(item.rect, _focusNodeTex);
+					GUI.color = temp;
+				}
+			}
+		}
+
+		void OnSwap()
+		{
+			var mousePos = Input.mousePosition;
+			mousePos.y = Screen.height - mousePos.y;
+
+			var from = _prepares.Find(item => item.node == _from);
+
+			var temp = GUI.color;
+			GUI.color = _selectedNodeTexColor;
+			GUI.DrawTexture(from.rect, _selectedNodeTex);
+			GUI.color = temp;
+
+			Handles.DrawBezier(from.rect.center, mousePos, from.rect.center, mousePos, Color.red, null, 5f);
+		}
+
+		void RevertButton(Rect pos)
+		{
+			if(GUI.Button(pos, "Revert All"))
+			{
+				var procs = _targetBasis.nodes.OfType<ProcessNode>();
+
+				foreach (var item in procs)
+					item.Revert();
+			}
 		}
 
 		void Start()
@@ -317,6 +394,36 @@ namespace FlowAI
 			Prepare(_targetBasis.entryPointNode);
 			DrawNodes();
 			DrawLines();
+			DrawFocus();
+			RevertButton(new Rect(_windowPosition + new Vector2(10f, 10f), new Vector2(100f, 33f)));
+
+			PrepareData? focused = _prepares
+				.Select(item => item as PrepareData?)
+				.FirstOrDefault(item => item.Value.isFocus);
+
+			if (Input.GetMouseButtonDown(0) && focused.HasValue && focused.Value.node is ProcessNode)
+			{
+				_isInSwap = true;
+				_from = focused.Value.node;
+			}
+
+			if (Input.GetMouseButtonUp(0) && _isInSwap && focused.HasValue && focused.Value.node is ProcessNode)
+			{
+				_isInSwap = false;
+				_to = focused.Value.node;
+				_targetBasis.ImitativeSwap(_from.localId, _to.localId);
+			}
+			else if (Input.GetMouseButtonUp(0) && _isInSwap)
+			{
+				_isInSwap = false;
+				_from = null;
+			}
+
+			if (_isInSwap)
+				OnSwap();
+
+			TFDebug.ClearMonitor("visualizer");
+			TFDebug.Write("visualizer", "is in swap:{0}\n", _isInSwap.ToString());
 		}
 	}
 }

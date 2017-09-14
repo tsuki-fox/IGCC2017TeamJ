@@ -23,6 +23,7 @@ namespace FlowAI
 			public EntryPointNode()
 			{
 				_nextNode = null;
+				_summary = "ENTRY";
 			}
 
 			public override FlowAINode GetNextNode()
@@ -174,17 +175,19 @@ namespace FlowAI
 			}
 		}
 
-		/// <summary>ノードを交換する. Swap nodes.</summary>
+		/// <summary>擬似的にノードを交換する. Swap two nodes for imitative.</summary>
 		/// <param name="fromId"></param>
 		/// <param name="toId"></param>
-		public void Swap(int fromId, int toId)
+		public void ImitativeSwap(int fromId, int toId)
 		{
+			if (fromId == toId)
+				return;
+
 			var temp1 = _nodes.Find(item => item.localId == fromId);
 			var temp2 = _nodes.Find(item => item.localId == toId);
 
 			var from = temp1 as ProcessNode;
 			var to = temp2 as ProcessNode;
-
 
 			//エラー処理
 			bool isFailed = false;
@@ -212,63 +215,13 @@ namespace FlowAI
 				TFDebug.Log("FlowAIBasis", "Swapに失敗しました");
 				return;
 			}
-			
-			//遷移先のノードを交換
-			{
-				var temp = from.nextNode;
-				from.nextNode = to.nextNode;
-				to.nextNode = temp;
-			}
-			//遷移元のノードを交換(処理ノード)
-			{
-				var fromPrevs = _nodes
-					.OfType<ProcessNode>()
-					.Where(item => item.nextNode == from);
 
-				var toPrevs = _nodes
-					.OfType<ProcessNode>()
-					.Where(item => item.nextNode == to);
+			var ft = from.Copy();
+			var tt = to.Copy();
 
-				TFDebug.Log("FlowAIBasis", "from prevs count:{0}", fromPrevs.Count());
-				TFDebug.Log("FlowAIBasis", "to prevs count:{0}", toPrevs.Count());
+			from.Imitate(tt);
+			to.Imitate(ft);
 
-				foreach(var prev in fromPrevs)
-					prev.nextNode = to;
-				foreach (var prev in toPrevs)
-					prev.nextNode = from;
-			}
-			//遷移元のノードを交換(分岐ノード)
-			{
-				var fromPrevs = _nodes
-					.OfType<BranchNode>()
-					.Where(item => item.trueNode == from || item.falseNode == from);
-
-				var toPrevs = _nodes
-					.OfType<BranchNode>()
-					.Where(item => item.trueNode == to || item.falseNode == to);
-
-				foreach(var prev in fromPrevs)
-				{
-					if (prev.trueNode == from)
-						prev.trueNode = to;
-					else
-						prev.falseNode = to;
-				}
-				foreach(var prev in toPrevs)
-				{
-					if (prev.trueNode == to)
-						prev.trueNode = from;
-					else
-						prev.falseNode = from;
-				}
-			}
-			//遷移元のノードを交換(エントリノード)
-			{
-				if (entryPointNode.nextNode == from)
-					entryPointNode.nextNode = to;
-				else if (entryPointNode.nextNode == to)
-					entryPointNode.nextNode = from;
-			}
 
 			TFDebug.Log("FlowAIBasis", "Swapping finished! from LID:{0} to LID:{1}", from.localId, to.localId);
 

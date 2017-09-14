@@ -14,6 +14,7 @@ namespace FlowAI
 
 		#region private fields
 		FlowAINode _nextNode = null;
+		ProcessNode _initial;
 		#endregion
 
 		#region properties
@@ -44,7 +45,54 @@ namespace FlowAI
 		{
 			Initialize(duration, next);
 			onProcess += process;
+
+			_initial = Copy();
 		}
+
+		public void Initialize(float duration, FlowAINode next, ProcessingEventHandler process,string summary)
+		{
+			Initialize(duration, next);
+			onProcess += process;
+			_summary = summary;
+
+			_initial = Copy();
+		}
+
+		/// <summary>処理ノードのコピーインスタンスを生成する create ProcessNode copy instance.</summary>
+		/// <returns></returns>
+		public ProcessNode Copy()
+		{
+			var node = new ProcessNode();
+
+			node._duration = this._duration;
+			node._localId = this._localId;
+			node._nextNode = this._nextNode;
+			node._summary = this._summary;
+			node.onProcess = this.onProcess;
+
+			return node;
+		}
+
+		/// <summary>振る舞いをコピーする copy behaivior.</summary>
+		/// <param name="node">コピー元</param>
+		public void Imitate(ProcessNode node)
+		{
+			this._duration = node._duration;
+			this._summary = node._summary;
+		//	this._localId = node._localId;
+			this.onProcess = node.onProcess;
+		}
+
+		/// <summary>このノードをInitialize直後の状態に巻き戻す</summary>
+		public void Revert()
+		{
+			this._duration = _initial._duration;
+			this._summary = _initial._summary;
+		//	this._localId = _initial._localId;
+			this.onProcess = _initial.onProcess;
+		//	this._nextNode = _initial._nextNode;
+		}
+
 		#endregion
 
 		#region overrides

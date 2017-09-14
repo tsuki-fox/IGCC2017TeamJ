@@ -10,9 +10,10 @@ public class VisualizerTest : MonoBehaviour
 	ProcessNode proc1;
 	ProcessNode proc2;
 	ProcessNode proc3;
+	ProcessNode proc4;
+	ProcessNode proc5;
 
 	BranchNode rand1;
-	BranchNode rand2;
 
 	void Start()
 	{
@@ -21,35 +22,33 @@ public class VisualizerTest : MonoBehaviour
 		proc1 = new ProcessNode();
 		proc2 = new ProcessNode();
 		proc3 = new ProcessNode();
+		proc4 = new ProcessNode();
+		proc5 = new ProcessNode();
 
 		rand1 = new BranchNode();
-		rand2 = new BranchNode();
 
-		proc1.Initialize(1.0f, rand1, () => TFDebug.Log("visualizer", "proc1 finished"));
-		proc2.Initialize(1.0f, rand2, () => TFDebug.Log("visualizer", "proc2 finished"));
-		proc3.Initialize(1.0f, proc1, () => TFDebug.Log("visualizer", "proc3 finished"));
+		proc1.Initialize(1.0f, rand1, () => TFDebug.Log("visualizer", "proc1 finished"),"プロセス1");
+		proc2.Initialize(1.0f, proc3, () => TFDebug.Log("visualizer", "proc2 finished"),"プロセス2");
+		proc3.Initialize(1.0f, proc1, () => TFDebug.Log("visualizer", "proc3 finished"),"プロセス3");
+		proc4.Initialize(1.0f, proc5, () => TFDebug.Log("visualizer", "proc4 finished"),"プロセス4");
+		proc5.Initialize(1.0f, proc1, () => TFDebug.Log("visualizer", "proc5 finished"),"プロセス5");
 
-		rand1.Initialize(proc2, 1.0f, proc3, 1.0f, () =>
+		rand1.Initialize(proc2, 1.0f, proc4, 1.0f, () =>
 		{
 			bool result = Random.Range(0, 2) == 0;
 			TFDebug.Log("visualizer", "rand1 {0}", result.ToString());
-			return result;
-		});
-		rand2.Initialize(proc1, 1.0f, rand2, 1.0f, () =>
-		{
-			bool result = Random.Range(0, 2) == 0;
-			TFDebug.Log("visualizer", "rand2 {0}", result.ToString());
 			return result;
 		});
 
 		proc1.summary = "プロセス1";
 		proc2.summary = "プロセス2";
 		proc3.summary = "プロセス3";
+		proc4.summary = "プロセス4";
+		proc5.summary = "プロセス5";
 
 		rand1.summary = "ランダム分岐1";
-		rand2.summary = "ランダム分岐2";
 
-		_flowAI.AddNode(proc1, proc2, proc3, rand1, rand2);
+		_flowAI.AddNode(proc1, proc2, proc3, proc4, proc5, rand1);
 		_flowAI.entryPointNode.nextNode = proc1;
 		_flowAI.Entry();
 	}
@@ -58,11 +57,5 @@ public class VisualizerTest : MonoBehaviour
 	void Update()
 	{
 		_flowAI.Update(Time.deltaTime);
-
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			_flowAI.Swap(proc2.localId, proc1.localId);
-			_flowAI.Entry();
-		}
 	}
 }
