@@ -390,6 +390,7 @@ public class EnemyControl_Patrol : MonoBehaviour
         gameObject.transform.rotation = rotation;
     }
 
+    // 最後に主人公を見た場所。
     bool UpdatePlayerLastKnownPosition() {
         bool result = CanSeePlayer();
 

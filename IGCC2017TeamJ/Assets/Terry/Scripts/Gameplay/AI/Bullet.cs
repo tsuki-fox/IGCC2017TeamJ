@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour {
     [SerializeField]
     private int bulletDamage = 20;
     [SerializeField]
-    private List<string> canDamageTags;
+    private List<string> canHitTags;
     [SerializeField]
     private float lifeTimeDuration = 5.0f;
     private float lifeTimeTimer = 5.0f;
@@ -52,8 +52,8 @@ public class Bullet : MonoBehaviour {
         for (int i = 0; i < result.Length; ++i) {
             GameObject hitGameObject = result[i].collider.gameObject;
 
-            for (int j = 0; j < canDamageTags.Count; ++j) {
-                if (hitGameObject.tag == canDamageTags[j]) {
+            for (int j = 0; j < canHitTags.Count; ++j) {
+                if (hitGameObject.tag == canHitTags[j]) {
                     Health hitHealth = hitGameObject.GetComponent<Health>();
                     if (hitHealth == null) {
                         continue;
