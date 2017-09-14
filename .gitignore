@@ -32,3 +32,13 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+#Directories
+IGCC2017TeamJ/Assets/Leura/*
+IGCC2017TeamJ/Assets/Shin/*
+IGCC2017TeamJ/Assets/Master/*
+IGCC2017TeamJ/Assets/Muku/*
+IGCC2017TeamJ/Assets/Shibata/*
+IGCC2017TeamJ/Library/*
+IGCC2017TeamJ/ProjectSettings/*
+IGCC2017TeamJ/Assets/Standard Assets/*
