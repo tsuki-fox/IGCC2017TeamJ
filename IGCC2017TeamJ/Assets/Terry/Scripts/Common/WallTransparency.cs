@@ -51,7 +51,11 @@ public class WallTransparency : MonoBehaviour {
 	void Update () {
         // Get this GameObject's MeshRenderer.
         MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
-        Assert.AreNotEqual(meshRenderer, null);
+        
+        if (meshRenderer == null) {
+            return;
+        }
+        //Assert.AreNotEqual(meshRenderer, null);
 
         Material[] materials = meshRenderer.materials;
 

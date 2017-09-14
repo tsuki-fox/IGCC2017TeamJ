@@ -41,7 +41,10 @@ public class VelocityLimit : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Rigidbody rigidbody = gameObject.GetComponent<Rigidbody>();
-        Assert.AreNotEqual(null, rigidbody);
+        if (rigidbody == null) {
+            return;
+        }
+        //Assert.AreNotEqual(null, rigidbody);
 
         Vector3 velocity = new Vector3(includeXAxis ? rigidbody.velocity.x : 0.0f,
                                        includeYAxis ? rigidbody.velocity.y : 0.0f,

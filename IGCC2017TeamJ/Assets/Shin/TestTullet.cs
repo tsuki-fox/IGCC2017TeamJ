@@ -131,26 +131,22 @@ public class TestTullet : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        //更新処理 Update.
-        _flowAI.Update(Time.deltaTime);
-
         fireTimer = Mathf.Max(0.0f, fireTimer - Time.deltaTime);
 
+        // プレイヤーの情報が何も入ってない場合
+        if (Player == null) {
+            GameplayChannel.GetInstance().SendRequestPlayerEvent();
+            return;
+        }
+
+        //更新処理 Update.
+        _flowAI.Update(Time.deltaTime);
+        
         time += Time.deltaTime;
 
         bool canSeePlayer = UpdatePlayerLastKnownPosition();
 
         _visionCone.CreateVisionConeMesh();
-
-        // プレイヤーの情報が何も入ってない場合
-        if (Player == null)
-        {
-            GameplayChannel.GetInstance().SendRequestPlayerEvent();
-            //return;
-        }
-
-
-        
 
         // 敵を見ているかの判定
         //if (_visionCone.IsTargetInVisionCone(gameObject, Player))

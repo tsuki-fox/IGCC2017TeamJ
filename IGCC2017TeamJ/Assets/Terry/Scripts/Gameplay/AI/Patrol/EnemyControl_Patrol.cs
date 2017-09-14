@@ -298,7 +298,10 @@ public class EnemyControl_Patrol : MonoBehaviour
         }
 
         // Make sure the waypoint isn't null.
-        Assert.AreNotEqual(null, waypoints[activeWaypoint]);
+        // Assert.AreNotEqual(null, waypoints[activeWaypoint]);
+        if (waypoints[activeWaypoint] == null) {
+            return;
+        }
 
         Vector3 destination = waypoints[activeWaypoint].position;
         Vector3 currentPos = transform.position;
@@ -341,8 +344,10 @@ public class EnemyControl_Patrol : MonoBehaviour
             // Raycast to ensure that nothing is blocking the explosion.
             if (!GameplayHelper.HasObstaclesBetween(gameObject.transform.position, player.transform.position, explosionBlockerTags)) {
                 Health playerHealth = player.GetComponent<Health>();
-                Assert.AreNotEqual(playerHealth, null);
-                playerHealth.DecreaseHealth(explosionDamage);
+                //Assert.AreNotEqual(playerHealth, null);
+                if (playerHealth != null) {
+                    playerHealth.DecreaseHealth(explosionDamage);
+                }
             }
         }
 
@@ -375,7 +380,10 @@ public class EnemyControl_Patrol : MonoBehaviour
     // Helper Functions
     void MoveTowards(Vector3 _destination, float _speed) {
         NavMeshAgent navAgent = gameObject.GetComponent<NavMeshAgent>();
-        Assert.AreNotEqual(navAgent, null);
+        //Assert.AreNotEqual(navAgent, null);
+        if (navAgent == null) {
+            return;
+        }
         navAgent.SetDestination(_destination);
         navAgent.speed = _speed;
     }
@@ -404,8 +412,11 @@ public class EnemyControl_Patrol : MonoBehaviour
 
     // Branch Node Predicated
     public bool CanSeePlayer() {
-        Assert.AreNotEqual(player, null);
-
+        //Assert.AreNotEqual(player, null);
+        if (player == null) {
+            return false;
+        }
+        
         bool result = visionCone.IsTargetInVisionCone(gameObject, player);
         if (result) {
             // 主人公が見えます。
@@ -436,12 +447,15 @@ public class EnemyControl_Patrol : MonoBehaviour
 
     bool CheckReachedWaypoint() {
         //Debug.Log("CheckReachedWaypoint");
-        if (waypoints.Count == 0) {
+        if (waypoints.Count == 0 || activeWaypoint >=waypoints.Count) {
             return true;
         }
 
         // There should not be any empty waypoints!
-        Assert.AreNotEqual(waypoints[activeWaypoint], null);
+        //Assert.AreNotEqual(waypoints[activeWaypoint], null);
+        if (waypoints[activeWaypoint] == null) {
+            return true;
+        }
 
         Vector3 currentPos = transform.position;
         Vector3 destination = waypoints[activeWaypoint].transform.position;
