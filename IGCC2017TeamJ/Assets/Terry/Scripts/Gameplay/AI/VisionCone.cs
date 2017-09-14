@@ -114,7 +114,7 @@ public class VisionCone {
         return numDivisions;
     }
 
-    public void SetMaterial(Material _material, bool _createVisionConeMesh) {
+    public void SetMaterial(Material _material, bool _createVisionConeMesh = false) {
         coneMaterial = _material;
 
         if (_createVisionConeMesh) {
@@ -159,14 +159,14 @@ public class VisionCone {
 
     public bool IsTargetInVisionCone(GameObject source, GameObject target) {
 		if (source == null || target == null) {
-            Debug.Log("VisionCone::IsTargetInVisionCone - Source or Target is null!");
+            //Debug.Log("VisionCone::IsTargetInVisionCone - Source or Target is null!");
             return false;
         }
 
         // Distance Check 距離
         Vector3 targetDirection = target.transform.position - source.transform.position;
         if (targetDirection.sqrMagnitude > viewDistance * viewDistance) {
-            Debug.Log("VisionCone::IsTargetInVisionCone - Target is too far!");
+            //Debug.Log("VisionCone::IsTargetInVisionCone - Target is too far!");
             return false;
         } else {
             //Debug.Log(targetDirection.magnitude);
@@ -177,11 +177,11 @@ public class VisionCone {
         float dotProduct = Vector3.Dot(source.transform.forward, targetDirection);
         float angleTotarget = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
         if (angleTotarget > viewAngle) {
-            Debug.Log("VisionCone::IsTargetInVisionCone - Target's name is " + target.name + ".");
-            Debug.Log("VisionCone::IsTargetInVisionCone - Target is outside view angle!");
-            Debug.Log("VisionCone::IsTargetInVisionCone - Current Angle To Target is " + angleTotarget + " Degrees");
-            Debug.Log("VisionCone::IsTargetInVisionCone - Direction To Target is " + targetDirection);
-            Debug.Log("VisionCone::IsTargetInVisionCone - Source's Forward Vector is " + source.transform.forward);
+            //Debug.Log("VisionCone::IsTargetInVisionCone - Target's name is " + target.name + ".");
+            //Debug.Log("VisionCone::IsTargetInVisionCone - Target is outside view angle!");
+            //Debug.Log("VisionCone::IsTargetInVisionCone - Current Angle To Target is " + angleTotarget + " Degrees");
+            //Debug.Log("VisionCone::IsTargetInVisionCone - Direction To Target is " + targetDirection);
+            //Debug.Log("VisionCone::IsTargetInVisionCone - Source's Forward Vector is " + source.transform.forward);
             return false;
         }
 
@@ -223,7 +223,7 @@ public class VisionCone {
             numSlices = 3;
         }
 
-        Vector2[] uvs = { new Vector2() }; // No UVs. No fucking way I'm supporting textures for this shit.
+        //Vector2[] uvs = { new Vector2() }; // No UVs. No fucking way I'm supporting textures for this shit.
         List<Vector3> vertexList = new List<Vector3>();
         List<int> triangleList = new List<int>();
 

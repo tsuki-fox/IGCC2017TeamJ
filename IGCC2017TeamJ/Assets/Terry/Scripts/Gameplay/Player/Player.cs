@@ -19,7 +19,7 @@ public class Player : MonoBehaviour {
     }
 
     void RequestPlayerEvent() {
-        GameplayChannel.GetInstance().SendReplyPlayerEvent(gameObject);
+        GameplayChannel.GetInstance().SendReplyPlayerEvent(gameObject); //私は主人公です。
     }
 
     public bool IsHiding() {
