@@ -147,7 +147,6 @@ public class EnemyControl_Patrol : MonoBehaviour
         }
         
         chaseGiveUpTimer = chaseGiveUpDuration;
-        flowAI.Swap(chaseNodeId, flowAI.currentNode.localId);
         flowAI.Transition(chaseNodeId);
     }
 
