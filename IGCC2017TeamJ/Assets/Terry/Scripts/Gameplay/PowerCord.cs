@@ -60,11 +60,13 @@ public class PowerCord : MonoBehaviour {
 
                     {
                         // Check Turret here.
+                        TestTullet testTullet = hitGameObject.GetComponent<TestTullet>();
+                        if (testTullet != null && testTullet.CanSeePlayer()) {
+                            break;
+                        }
                     }
 
                     // Do hacking here.
-                    Debug.Log("Hacked");
-
                     FlowAIVisualizer visualizer = FindObjectOfType<FlowAI.FlowAIVisualizer>();
                     Assert.AreNotEqual(visualizer, null);
                     visualizer.target = flowAIHolder;

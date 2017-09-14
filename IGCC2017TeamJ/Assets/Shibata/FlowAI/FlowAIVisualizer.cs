@@ -564,13 +564,13 @@ namespace FlowAI
 
 		void OnGUI()
 		{
-			if (!_isInHacking)
+			/*if (!_isInHacking)
 			{
 				if (GUI.Button(new Rect(0, 0, 100, 33), "hack begin"))
 				{
 					BeginHacking(0.05f);
 				}
-			}
+			}*/
 
 			TFDebug.Write("visualizer", "show time:{0}\n", _showElapsed);
 

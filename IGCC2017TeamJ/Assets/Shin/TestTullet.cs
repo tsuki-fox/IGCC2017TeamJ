@@ -158,14 +158,14 @@ public class TestTullet : MonoBehaviour {
         {
             _isFound = true;
 
-            Debug.Log("Can see target! 主人公を見ています！");
+            //Debug.Log("Can see target! 主人公を見ています！");
 
         }
         else
         {
             _isFound = false;
 
-            Debug.Log("Cannot see target! 主人公を見ていません！");
+            //Debug.Log("Cannot see target! 主人公を見ていません！");
         }
       
       
@@ -195,7 +195,7 @@ public class TestTullet : MonoBehaviour {
         DeinitEvents();
     }
 
-    bool CanSeePlayer()
+    public bool CanSeePlayer()
     {
         Assert.AreNotEqual(Player, null);
 
