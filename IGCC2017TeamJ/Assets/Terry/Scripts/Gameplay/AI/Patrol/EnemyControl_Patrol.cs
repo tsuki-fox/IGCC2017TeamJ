@@ -168,25 +168,25 @@ public class EnemyControl_Patrol : MonoBehaviour
         BranchNode checkReachedWaypointNode = new BranchNode();
         BranchNode checkPlayerEscapedNode = new BranchNode();
 
-        canSeePlayerNode.Initialize(alertNode, 0.1f, checkReachedWaypointNode, 0.1f, CanSeePlayer, "Can See Player?");
-        alertNode.Initialize(0.1f, playerInAttackRangeNode, AlertNodeFunction, "Alert Others");
-        checkReachedWaypointNode.Initialize(patrolReachedNode, 0.1f, patrolMoveNode, 0.1f, CheckReachedWaypoint, "Reached Waypoint?");
+        canSeePlayerNode.Initialize(alertNode, 0.05f, checkReachedWaypointNode, 0.05f, CanSeePlayer, "Can See Player?");
+        alertNode.Initialize(0.05f, playerInAttackRangeNode, AlertNodeFunction, "Alert Others");
+        checkReachedWaypointNode.Initialize(patrolReachedNode, 0.05f, patrolMoveNode, 0.05f, CheckReachedWaypoint, "Reached Waypoint?");
         
-        chaseNode.Initialize(0.1f, checkPlayerEscapedNode, ChaseNodeFunction, "Chase Target");
-        checkPlayerEscapedNode.Initialize(canSeePlayerNode, 0.1f, playerInAttackRangeNode, 0.1f, CheckPlayerEscaped, "Has Target Escaped?");
+        chaseNode.Initialize(0.05f, checkPlayerEscapedNode, ChaseNodeFunction, "Chase Target");
+        checkPlayerEscapedNode.Initialize(canSeePlayerNode, 0.05f, playerInAttackRangeNode, 0.05f, CheckPlayerEscaped, "Has Target Escaped?");
 
-        patrolMoveNode.Initialize(0.1f, canSeePlayerNode, PatrolMoveNodeFunction, "Patrol Move");
-        patrolReachedNode.Initialize(0.1f, canSeePlayerNode, PatrolReachedNodeFunction, "Patrol Reached Waypoint");
+        patrolMoveNode.Initialize(0.05f, canSeePlayerNode, PatrolMoveNodeFunction, "Patrol Move");
+        patrolReachedNode.Initialize(0.05f, canSeePlayerNode, PatrolReachedNodeFunction, "Patrol Reached Waypoint");
 
         switch (attackType) {
             case AttackType.AttackType_Explode:
-                explodeNode.Initialize(0.1f, null, ExplodeNodeFunction, "Explosion!");
-                playerInAttackRangeNode.Initialize(explodeNode, 0.1f, chaseNode, 0.1f, PlayerInAttackRange, "Is Target In Explosion Range?");
+                explodeNode.Initialize(0.05f, null, ExplodeNodeFunction, "Explosion!");
+                playerInAttackRangeNode.Initialize(explodeNode, 0.05f, chaseNode, 0.05f, PlayerInAttackRange, "Is Target In Explosion Range?");
                 flowAI.AddNode(explodeNode);
                 break;
             case AttackType.AttackType_Shoot:
                 shootNode.Initialize(1.0f, playerInAttackRangeNode, ShootNodeFunction, "Shoot!");
-                playerInAttackRangeNode.Initialize(shootNode, 0.1f, chaseNode, 0.1f, PlayerInAttackRange, "Is Target In Shooting Range?");
+                playerInAttackRangeNode.Initialize(shootNode, 0.05f, chaseNode, 0.05f, PlayerInAttackRange, "Is Target In Shooting Range?");
                 flowAI.AddNode(shootNode);
                 break;
             default:
