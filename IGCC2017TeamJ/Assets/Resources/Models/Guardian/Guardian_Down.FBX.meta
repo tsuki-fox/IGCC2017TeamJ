@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: e851fbaac43a86c46a31a67be4406dcc
-timeCreated: 1505188515
+guid: 49f4e0777e44d634a941e70711ce993d
+timeCreated: 1505188512
 licenseType: Pro
 ModelImporter:
   serializedVersion: 21
@@ -45,55 +45,55 @@ ModelImporter:
     100074: Box052
     100076: Cylinder003
     100078: Cylinder004
-    100080: houtou
-    100082: IK Chain001
-    100084: IK Chain002
-    100086: IK Chain003
-    100088: IK Chain004
-    100090: left front
-    100092: left front ne
-    100094: left front rota
-    100096: left houtou
-    100098: left rear
-    100100: left rear ne
-    100102: left rear rota
-    100104: light front
-    100106: light front ne
-    100108: light front rota
-    100110: light houtou
-    100112: light rear
-    100114: light rear ne
-    100116: light rear rota
-    100118: Point001
-    100120: Point002
-    100122: Point003
-    100124: Point004
-    100126: Point005
-    100128: Point006
-    100130: Point013
-    100132: Point014
-    100134: Point015
-    100136: Point016
-    100138: Point017
-    100140: Point018
-    100142: Point025
-    100144: Point026
-    100146: Point027
-    100148: Point028
-    100150: Point029
-    100152: Point030
-    100154: Point031
-    100156: Point032
-    100158: Point033
-    100160: Point034
-    100162: Point035
-    100164: Point036
-    100166: Point037
-    100168: Point038
-    100170: Rota
-    100172: Shape001
-    100174: Shape002
-    100176: //RootNode
+    100080: //RootNode
+    100082: houtou
+    100084: IK Chain001
+    100086: IK Chain002
+    100088: IK Chain003
+    100090: IK Chain004
+    100092: left front
+    100094: left front ne
+    100096: left front rota
+    100098: left houtou
+    100100: left rear
+    100102: left rear ne
+    100104: left rear rota
+    100106: light front
+    100108: light front ne
+    100110: light front rota
+    100112: light houtou
+    100114: light rear
+    100116: light rear ne
+    100118: light rear rota
+    100120: Point001
+    100122: Point002
+    100124: Point003
+    100126: Point004
+    100128: Point005
+    100130: Point006
+    100132: Point013
+    100134: Point014
+    100136: Point015
+    100138: Point016
+    100140: Point017
+    100142: Point018
+    100144: Point025
+    100146: Point026
+    100148: Point027
+    100150: Point028
+    100152: Point029
+    100154: Point030
+    100156: Point031
+    100158: Point032
+    100160: Point033
+    100162: Point034
+    100164: Point035
+    100166: Point036
+    100168: Point037
+    100170: Point038
+    100172: Rota
+    100174: Shape001
+    100176: Shape002
     100178: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8003"
     100180: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8004"
     100182: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8008"
@@ -140,55 +140,55 @@ ModelImporter:
     400074: Box052
     400076: Cylinder003
     400078: Cylinder004
-    400080: houtou
-    400082: IK Chain001
-    400084: IK Chain002
-    400086: IK Chain003
-    400088: IK Chain004
-    400090: left front
-    400092: left front ne
-    400094: left front rota
-    400096: left houtou
-    400098: left rear
-    400100: left rear ne
-    400102: left rear rota
-    400104: light front
-    400106: light front ne
-    400108: light front rota
-    400110: light houtou
-    400112: light rear
-    400114: light rear ne
-    400116: light rear rota
-    400118: Point001
-    400120: Point002
-    400122: Point003
-    400124: Point004
-    400126: Point005
-    400128: Point006
-    400130: Point013
-    400132: Point014
-    400134: Point015
-    400136: Point016
-    400138: Point017
-    400140: Point018
-    400142: Point025
-    400144: Point026
-    400146: Point027
-    400148: Point028
-    400150: Point029
-    400152: Point030
-    400154: Point031
-    400156: Point032
-    400158: Point033
-    400160: Point034
-    400162: Point035
-    400164: Point036
-    400166: Point037
-    400168: Point038
-    400170: Rota
-    400172: Shape001
-    400174: Shape002
-    400176: //RootNode
+    400080: //RootNode
+    400082: houtou
+    400084: IK Chain001
+    400086: IK Chain002
+    400088: IK Chain003
+    400090: IK Chain004
+    400092: left front
+    400094: left front ne
+    400096: left front rota
+    400098: left houtou
+    400100: left rear
+    400102: left rear ne
+    400104: left rear rota
+    400106: light front
+    400108: light front ne
+    400110: light front rota
+    400112: light houtou
+    400114: light rear
+    400116: light rear ne
+    400118: light rear rota
+    400120: Point001
+    400122: Point002
+    400124: Point003
+    400126: Point004
+    400128: Point005
+    400130: Point006
+    400132: Point013
+    400134: Point014
+    400136: Point015
+    400138: Point016
+    400140: Point017
+    400142: Point018
+    400144: Point025
+    400146: Point026
+    400148: Point027
+    400150: Point028
+    400152: Point029
+    400154: Point030
+    400156: Point031
+    400158: Point032
+    400160: Point033
+    400162: Point034
+    400164: Point035
+    400166: Point036
+    400168: Point037
+    400170: Point038
+    400172: Rota
+    400174: Shape001
+    400176: Shape002
     400178: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8003"
     400180: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8004"
     400182: "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8008"
@@ -276,7 +276,7 @@ ModelImporter:
     4300048: Box036
     4300050: Box033
     4300052: Box035
-    7400000: Take 001
+    7400000: Guardian_Down
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -301,7 +301,35 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Guardian_Down
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 70
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
